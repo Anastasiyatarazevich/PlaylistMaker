@@ -36,6 +36,7 @@
         android:layout_marginBottom="28dp">
 
         <Button
+            android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -51,6 +52,7 @@
             app:iconPadding="10dp"/>
 
         <Button
+            android:id="@+id/library"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -66,6 +68,7 @@
             app:iconPadding="10dp"/>
 
         <Button
+            android:id="@+id/settings"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
