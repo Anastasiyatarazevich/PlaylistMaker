@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="icon_size">24dp</dimen>
+    <dimen name="margin_standard">24dp</dimen>
+    <dimen name="margin_small">16dp</dimen>
+    <dimen name="btn_corners">16dp</dimen>
+    <dimen name="icon_padding">10dp</dimen>
     <dimen name="list_item_height">61dp</dimen>
     <dimen name="list_item_padding">16dp</dimen>
+    <dimen name="frame_height">48dp</dimen>
+    <dimen name="layout_height">56dp</dimen>
     <dimen name="text_normal">16sp</dimen>
     <dimen name="text_big">22sp</dimen>
 </resources>

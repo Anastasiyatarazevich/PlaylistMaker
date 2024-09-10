@@ -10,7 +10,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/layout_height"
         android:padding="4dp">
 
         <TextView
@@ -30,9 +30,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginBottom="28dp">
 
         <Button
@@ -44,12 +44,12 @@
             android:text="@string/search"
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/text_big"
-            app:cornerRadius="16dp"
+            app:cornerRadius="@dimen/btn_corners"
             android:textAllCaps="false"
             app:icon="@drawable/light_mode_search"
             app:iconTint="@color/dark_gray"
             app:iconGravity="textStart"
-            app:iconPadding="10dp"/>
+            app:iconPadding="@dimen/icon_padding"/>
 
         <Button
             android:id="@+id/library"
@@ -60,12 +60,12 @@
             android:text="@string/media"
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/text_big"
-            app:cornerRadius="16dp"
+            app:cornerRadius="@dimen/btn_corners"
             android:textAllCaps="false"
             app:icon="@drawable/light_mode_library"
             app:iconTint="@color/dark_gray"
             app:iconGravity="textStart"
-            app:iconPadding="10dp"/>
+            app:iconPadding="@dimen/icon_padding"/>
 
         <Button
             android:id="@+id/settings"
@@ -76,11 +76,11 @@
             android:text="@string/settings"
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/text_big"
-            app:cornerRadius="16dp"
+            app:cornerRadius="@dimen/btn_corners"
             android:textAllCaps="false"
             app:icon="@drawable/light_mode_settings"
             app:iconTint="@color/dark_gray"
             app:iconGravity="textStart"
-            app:iconPadding="10dp"/>
+            app:iconPadding="@dimen/icon_padding"/>
     </LinearLayout>
 </LinearLayout>

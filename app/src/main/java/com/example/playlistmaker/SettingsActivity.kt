@@ -11,13 +11,11 @@ class SettingsActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
 
         val back = findViewById<ImageView>(R.id.back_button)
         back.setOnClickListener{
-            val menuIntent = Intent(this, MainActivity::class.java)
-            startActivity(menuIntent)
+            finish()
         }
     }
 }
