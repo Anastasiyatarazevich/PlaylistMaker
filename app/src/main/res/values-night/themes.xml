@@ -11,6 +11,8 @@
         <item name="trackTint">@color/light_gray</item>
         <item name="colorTertiary">@color/white</item>
         <item name="textAppearanceBodyLarge">@color/white</item>
+        <item name="editTextBackground">@color/light_gray</item>
+        <item name="editTextColor">@color/dark_gray</item>
 
     </style>
 </resources>

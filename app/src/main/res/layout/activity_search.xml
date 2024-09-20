@@ -1,12 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical">
 
-    <TextView
-        style="@style/TextView"
-        android:text="@string/search"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_height"
+        android:layout_marginBottom="8dp"
+        android:paddingStart="4dp"
+        android:paddingTop="4dp">
 
-</FrameLayout>
+        <FrameLayout
+            android:layout_width="@dimen/frame_height"
+            android:layout_height="@dimen/frame_height">
+
+            <ImageView
+                android:id="@+id/back_button"
+                style="@style/ImageView"
+                android:layout_gravity="center"
+                android:src="@drawable/light_mode_back"
+                app:tint="?attr/textAppearanceBody2" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/frame_height">
+
+            <TextView
+               style="@style/TextViewHeader"
+                android:text="@string/search"
+               />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:background="@drawable/rounded_edittext"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/padding_small"
+        android:paddingEnd="@dimen/padding_small">
+
+        <EditText
+            android:id="@+id/search_input"
+            style="@style/EditTextSearch" />
+
+        <ImageView
+            android:id="@+id/clear_button"
+            android:layout_width="@dimen/icon_size_small"
+            android:layout_height="@dimen/icon_size_small"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/margin_small2"
+            android:src="@drawable/delete"
+            android:visibility="gone"
+            app:tint='?attr/editTextColor' />
+
+    </LinearLayout>
+</LinearLayout>
