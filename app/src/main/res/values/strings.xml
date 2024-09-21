@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Playlist maker</string>
+    <string name="app_name">S-app</string>
     <string name="theme">Темная тема</string>
     <string name="share">Поделиться приложением</string>
     <string name="support">Написать в поддержку</string>
@@ -7,4 +7,11 @@
     <string name="settings">Настройки</string>
     <string name="search">Поиск</string>
     <string name="media">Медиатека</string>
+    <string name="share_text">Хочу порекомендовать курс по Андроид-разработке в Практикуме: https://practicum.yandex.ru/profile/android-developer/?from=catalog</string>
+    <string name="share_title">Поделиться приложением</string>
+    <string name="support_email">anastasiya.tarazevich22@gmail.com</string>
+    <string name="support_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="support_message">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="agreement_url">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="share_text_fail">Почтовое приложение не найдено</string>
 </resources>

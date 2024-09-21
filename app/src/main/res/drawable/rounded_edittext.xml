@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Закруглённые углы -->
+    <corners android:radius="8dp" />
+
+    <!-- Цвет фона -->
+    <solid android:color="@color/light_gray" />
+
+    <!-- Внутренние отступы -->
+    <padding
+        android:left="12dp"
+        android:top="8.5dp"
+        android:bottom="8.5dp" />
+</shape>
