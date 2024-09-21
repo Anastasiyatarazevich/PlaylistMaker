@@ -7,6 +7,8 @@
     <dimen name="btn_corners">16dp</dimen>
     <dimen name="icon_padding">10dp</dimen>
     <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_vertical">20dp</dimen>
+    <dimen name="padding_horizontal">16dp</dimen>
     <dimen name="list_item_height">61dp</dimen>
     <dimen name="list_item_padding">16dp</dimen>
     <dimen name="frame_height">48dp</dimen>

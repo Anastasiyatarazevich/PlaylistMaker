@@ -8,6 +8,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.textview.MaterialTextView
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -15,12 +17,12 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val back = findViewById<ImageView>(R.id.back_button)
-        val shareAppButton = findViewById<FrameLayout>(R.id.share_app)
-        val writeSupportButton = findViewById<FrameLayout>(R.id.support)
-        val agreementButton = findViewById<FrameLayout>(R.id.user_agreement)
+        val back = findViewById<MaterialToolbar>(R.id.back_button)
+        val shareAppButton = findViewById<MaterialTextView>(R.id.share_app)
+        val writeSupportButton = findViewById<MaterialTextView>(R.id.support)
+        val agreementButton = findViewById<MaterialTextView>(R.id.user_agreement)
 
-        back.setOnClickListener {
+        back.setNavigationOnClickListener{
             finish()
         }
 

@@ -1,102 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_height"
-        android:layout_marginBottom="@dimen/margin_standard"
-        android:paddingStart="4dp"
-        android:paddingTop="4dp">
 
-        <FrameLayout
-            android:layout_width="@dimen/frame_height"
-            android:layout_height="@dimen/frame_height">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/back_button"
+        style="@style/MaterialToolbar"
+        app:title="@string/settings" />
 
-            <ImageView
-                android:id="@+id/back_button"
-                style="@style/ImageView"
-                android:layout_gravity="center"
-                android:src="@drawable/light_mode_back"
-                app:tint="?attr/textAppearanceBody2" />
-        </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/frame_height">
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitcher1"
+        style="@style/MaterialTextView"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="0dp"
+        android:text="@string/theme"
+        android:thumbTintMode="screen"
+        app:thumbTint="@color/thumb_color"
+        app:trackTint="@color/track_color"/>
 
-            <TextView
-                android:id="@+id/settings_title"
-                style="@style/TextViewHeader"
-                android:text="@string/settings" />
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <FrameLayout
-        style="@style/FrameLayout"
-        android:paddingTop="@dimen/margin_standard"
-        android:paddingEnd="8dp">
-
-        <TextView
-            style="@style/TextViewSettingsListItems"
-            android:text="@string/theme" />
-
-        <Switch
-            android:layout_width="@dimen/layout_height"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="center_vertical"
-            android:thumbTint="?attr/thumbTint"
-            android:trackTint="?attr/trackTint"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/share_app"
-        style="@style/FrameLayout">
+        style="@style/MaterialTextView"
+        android:drawableEnd="@drawable/light_mode_share"
+        android:text="@string/share" />
 
-        <TextView
-            style="@style/TextViewSettingsListItems"
-            android:text="@string/share" />
-
-        <ImageView
-            style="@style/ImageView"
-            android:src="@drawable/light_mode_share" />
-    </FrameLayout>
-
-
-    <FrameLayout
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/support"
-        style="@style/FrameLayout">
+        style="@style/MaterialTextView"
+        android:drawableEnd="@drawable/light_mode_support"
+        android:text="@string/support" />
 
-        <TextView
-            style="@style/TextViewSettingsListItems"
-            android:text="@string/support" />
-
-        <ImageView
-            style="@style/ImageView"
-            android:src="@drawable/light_mode_support" />
-    </FrameLayout>
-
-    <FrameLayout
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/user_agreement"
-        style="@style/FrameLayout">
-
-        <TextView
-            style="@style/TextViewSettingsListItems"
-            android:text="@string/user_agreement" />
-
-        <ImageView
-            style="@style/ImageView"
-            android:src="@drawable/light_mode_arrow_forward" />
-    </FrameLayout>
+        style="@style/MaterialTextView"
+        android:drawableEnd="@drawable/light_mode_arrow_forward"
+        android:text="@string/user_agreement" />
 
 </LinearLayout>

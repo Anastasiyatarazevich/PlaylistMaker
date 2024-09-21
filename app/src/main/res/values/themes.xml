@@ -7,13 +7,12 @@
          <item name="colorOnSecondary">@color/dark_gray</item>
          <item name="textAppearanceBody1">@color/black</item>
          <item name="textAppearanceBody2">@color/dark_gray</item>
-         <item name="thumbTint">@color/gray</item>
-         <item name="trackTint">@color/light_gray</item>
+         <item name="thumbTint">@color/thumb_color</item>
+         <item name="trackTint">@color/track_color</item>
          <item name="colorTertiary">@color/gray</item>
          <item name="textAppearanceBodyLarge">@color/white</item>
          <item name="editTextBackground">@color/light_gray</item>
         <item name="editTextColor">@color/gray</item>
-
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

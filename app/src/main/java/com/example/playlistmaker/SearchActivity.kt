@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
 
@@ -23,7 +24,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val back = findViewById<ImageView>(R.id.back_button)
+        val back = findViewById<MaterialToolbar>(R.id.back_button)
         val searchInput = findViewById<EditText>(R.id.search_input)
         val clearButton = findViewById<ImageView>(R.id.clear_button)
 
@@ -33,7 +34,7 @@ class SearchActivity : AppCompatActivity() {
             searchInput.setText(searchText)
         }
 
-        back.setOnClickListener {
+        back.setNavigationOnClickListener {
             finish()
         }
 
