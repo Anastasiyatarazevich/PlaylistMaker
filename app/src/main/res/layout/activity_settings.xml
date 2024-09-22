@@ -7,12 +7,10 @@
     android:background="?attr/colorSecondary"
     android:orientation="vertical">
 
-
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back_button"
         style="@style/MaterialToolbar"
         app:title="@string/settings" />
-
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/themeSwitcher1"

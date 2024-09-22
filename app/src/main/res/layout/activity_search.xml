@@ -16,16 +16,16 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginTop="@dimen/padding_small"
         android:layout_marginEnd="@dimen/margin_small"
         android:background="@drawable/rounded_edittext"
         android:paddingStart="@dimen/padding_small"
-        android:layout_marginTop="@dimen/padding_small"
         android:paddingEnd="@dimen/padding_small">
 
         <EditText
             android:id="@+id/search_input"
             style="@style/EditTextSearch"
-            android:textCursorDrawable="@drawable/cursor_color"/>
+            android:textCursorDrawable="@drawable/cursor_color" />
 
         <ImageView
             android:id="@+id/clear_button"
@@ -33,9 +33,15 @@
             android:layout_height="@dimen/icon_size_small"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/margin_small2"
-            android:visibility="gone"
             android:src="@drawable/delete"
+            android:visibility="gone"
             app:tint='?attr/editTextColor' />
 
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_top" />
 </LinearLayout>
