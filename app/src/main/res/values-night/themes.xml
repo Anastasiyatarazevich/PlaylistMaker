@@ -13,6 +13,7 @@
         <item name="textAppearanceBodyLarge">@color/white</item>
         <item name="editTextBackground">@color/light_gray</item>
         <item name="editTextColor">@color/dark_gray</item>
-
+        <item name="textAppearanceBodyMedium">@color/white</item>
+        <item name="textAppearanceBodySmall">@color/white</item>
     </style>
 </resources>

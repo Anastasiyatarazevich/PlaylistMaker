@@ -101,6 +101,17 @@
         <item name="titleTextAppearance">@style/TextViewHeader</item>
     </style>
 
+    <style name="TextViewRecycler">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="titleTextColor">?attr/textAppearanceBodySmall</item>
+        <item name="android:textSize">@dimen/text_small</item>
+    </style>
+
 
 </resources>
 

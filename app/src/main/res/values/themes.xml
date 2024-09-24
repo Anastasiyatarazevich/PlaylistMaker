@@ -13,6 +13,9 @@
          <item name="textAppearanceBodyLarge">@color/white</item>
          <item name="editTextBackground">@color/light_gray</item>
         <item name="editTextColor">@color/gray</item>
+        <item name="textAppearanceBodyMedium">@color/black</item>
+        <item name="textAppearanceBodySmall">@color/gray</item>
+
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
