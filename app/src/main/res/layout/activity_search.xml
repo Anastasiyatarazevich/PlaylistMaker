@@ -25,6 +25,8 @@
         <EditText
             android:id="@+id/search_input"
             style="@style/EditTextSearch"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:textCursorDrawable="@drawable/cursor_color" />
 
         <ImageView
@@ -39,9 +41,60 @@
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/padding_top" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_top" />
+
+        <TextView
+            android:id="@+id/placeholder_nothing"
+            style="@style/PlaceholderFoundNothing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:drawableTopCompat="@drawable/placeholder_nothing" />
+
+        <LinearLayout
+            android:id="@+id/placeholder_no_connection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/placeholder_noconnection" />
+
+            <TextView
+                style="@style/NoConnectionPlaceholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/no_connection" />
+
+            <TextView
+                style="@style/NoConnectionPlaceholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:text="@string/download_failed" />
+
+            <Button
+                android:id="@+id/update"
+                style="@style/UpdateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cornerRadius="@dimen/btn_corners_big" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
 </LinearLayout>
