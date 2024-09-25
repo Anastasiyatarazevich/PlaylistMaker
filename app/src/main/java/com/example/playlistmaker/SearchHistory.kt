@@ -8,10 +8,6 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
 
     private val trackHistoryList = getHistory().toMutableList()
 
-    companion object {
-        private const val SEARCH_HISTORY_KEY = "HISTORY_KEY"
-        private const val MAX_HISTORY_SIZE = 10
-    }
 
     fun addTrack(track: Track) {
         trackHistoryList.removeAll { it.trackId == track.trackId }
@@ -46,5 +42,10 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
         sharedPrefs.edit()
             .remove(SEARCH_HISTORY_KEY)
             .apply()
+    }
+
+    companion object {
+        private const val SEARCH_HISTORY_KEY = "HISTORY_KEY"
+        private const val MAX_HISTORY_SIZE = 10
     }
 }

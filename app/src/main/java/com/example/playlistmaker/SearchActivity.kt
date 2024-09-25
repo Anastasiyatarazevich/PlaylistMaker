@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -19,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,12 +57,6 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchText: String? = null
 
-    companion object {
-        private const val SEARCH_TEXT_KEY = "TEXT_KEY"
-        private const val SEARCH_HISTORY_SHARED_PREFS = "HISTORY_SP"
-        private const val SEARCH_HISTORY_KEY = "HISTORY_KEY"
-    }
-
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,15 +87,19 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryRecyclerView.layoutManager = LinearLayoutManager(this)
 
 
+
         trackAdapter.onClickTrack = { track: Track ->
             searchHistory.addTrack(track)
             updateSearchHistory()
+            goToInfo(track)
         }
 
         trackHistoryAdapter.onClickTrack = { track: Track ->
             searchHistory.addTrack(track)
             updateSearchHistory()
+            goToInfo(track)
         }
+
 
 
         listenerSharedPrefs =
@@ -128,18 +128,18 @@ class SearchActivity : AppCompatActivity() {
             if (hasFocus && searchInput.text.isNullOrEmpty()
                 && searchHistory.getHistory().isNotEmpty()
             ) {
-                searchHistoryLayout.visibility = View.VISIBLE
+                searchHistoryLayout.isVisible = true
                 trackListSearchHistory.addAll(searchHistory.getHistory())
                 trackHistoryAdapter.notifyDataSetChanged()
             } else {
-                searchHistoryLayout.visibility = View.GONE
+                searchHistoryLayout.isVisible = false
             }
         }
 
         searchHistoryClearButton.setOnClickListener {
             searchHistory.clearHistory()
             updateSearchHistory()
-            searchHistoryLayout.visibility = View.GONE
+            searchHistoryLayout.isVisible = false
         }
 
 
@@ -181,10 +181,10 @@ class SearchActivity : AppCompatActivity() {
                 if (searchInput.hasFocus() && s?.isNullOrEmpty() == true
                     && searchHistory.getHistory().isNotEmpty()
                 ) {
-                    searchHistoryLayout.visibility = View.VISIBLE
+                    searchHistoryLayout.isVisible = true
                     updateSearchHistory()
                 } else {
-                    searchHistoryLayout.visibility = View.GONE
+                    searchHistoryLayout.isVisible = false
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
                 }
@@ -204,6 +204,12 @@ class SearchActivity : AppCompatActivity() {
             false
 
         }
+    }
+
+    fun goToInfo(track: Track) {
+        val audioPlayerIntent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+        audioPlayerIntent.putExtra(TRACK, Gson().toJson(track))
+        startActivity(audioPlayerIntent)
     }
 
     fun updateSearchHistory() {
@@ -253,25 +259,32 @@ class SearchActivity : AppCompatActivity() {
                         trackList.clear()
                         trackList.addAll(tracksResponse.results)
                         trackAdapter.notifyDataSetChanged()
-                        recyclerView.visibility = View.VISIBLE
-                        nothingPlaceHolder.visibility = View.GONE
-                        noConnectionPlaceholder.visibility = View.GONE
+                        recyclerView.isVisible = true
+                        nothingPlaceHolder.isVisible = false
+                        noConnectionPlaceholder.isVisible = false
                     } else {
                         trackList.clear()
                         trackAdapter.notifyDataSetChanged()
-                        recyclerView.visibility = View.GONE
-                        nothingPlaceHolder.visibility = View.VISIBLE
-                        noConnectionPlaceholder.visibility = View.GONE
+                        recyclerView.isVisible = false
+                        nothingPlaceHolder.isVisible = true
+                        noConnectionPlaceholder.isVisible = false
                     }
                 }
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
-                    recyclerView.visibility = View.GONE
-                    nothingPlaceHolder.visibility = View.GONE
-                    noConnectionPlaceholder.visibility = View.VISIBLE
+                    recyclerView.isVisible = false
+                    nothingPlaceHolder.isVisible = false
+                    noConnectionPlaceholder.isVisible = true
                 }
             })
+    }
+
+    companion object {
+        private const val SEARCH_TEXT_KEY = "TEXT_KEY"
+        private const val SEARCH_HISTORY_SHARED_PREFS = "HISTORY_SP"
+        private const val SEARCH_HISTORY_KEY = "HISTORY_KEY"
+        private const val TRACK = "TRACK_DATA"
     }
 }
