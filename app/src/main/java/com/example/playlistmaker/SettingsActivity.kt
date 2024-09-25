@@ -4,11 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
 
 class SettingsActivity : AppCompatActivity() {
@@ -21,10 +20,21 @@ class SettingsActivity : AppCompatActivity() {
         val shareAppButton = findViewById<MaterialTextView>(R.id.share_app)
         val writeSupportButton = findViewById<MaterialTextView>(R.id.support)
         val agreementButton = findViewById<MaterialTextView>(R.id.user_agreement)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
 
-        back.setNavigationOnClickListener{
+        back.setNavigationOnClickListener {
             finish()
         }
+
+        val sharedPrefs = getSharedPreferences("app_preferences", MODE_PRIVATE)
+        val isDarkTheme = sharedPrefs.getBoolean("dark_theme", false)
+        themeSwitcher.isChecked = isDarkTheme
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+
+
 
         shareAppButton.setOnClickListener {
             val shareIntent = Intent().apply {
@@ -43,7 +53,8 @@ class SettingsActivity : AppCompatActivity() {
                 data = Uri.parse("mailto:${getString(R.string.support_email)}")
                 putExtra(
                     Intent.EXTRA_EMAIL,
-                    getString(R.string.support_email))
+                    getString(R.string.support_email)
+                )
                 putExtra(
                     Intent.EXTRA_SUBJECT,
                     getString(R.string.support_subject)
@@ -55,7 +66,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             if (emailIntent.resolveActivity(packageManager) != null) {
                 startActivity(emailIntent)
-            }else
+            } else
                 Toast.makeText(this, getString(R.string.share_text_fail), Toast.LENGTH_SHORT).show()
         }
 

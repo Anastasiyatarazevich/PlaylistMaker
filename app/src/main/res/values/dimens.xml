@@ -4,6 +4,7 @@
     <dimen name="margin_standard">24dp</dimen>
     <dimen name="margin_small">16dp</dimen>
     <dimen name="margin_small2">8dp</dimen>
+    <dimen name="margin_extra">102dp</dimen>
     <dimen name="btn_corners">16dp</dimen>
     <dimen name="btn_corners_big">54dp</dimen>
     <dimen name="icon_padding">10dp</dimen>

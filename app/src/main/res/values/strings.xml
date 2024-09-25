@@ -18,4 +18,6 @@
     <string name="nothing_was_found">Ничего не нашлось</string>
     <string name="no_connection">Проблемы со связью</string>
     <string name="download_failed">Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="your_history">Ваша история</string>
 </resources>
