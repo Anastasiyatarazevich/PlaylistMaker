@@ -13,7 +13,7 @@
         app:title="@string/settings" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/themeSwitcher1"
+        android:id="@+id/theme_switcher"
         style="@style/MaterialTextView"
         android:gravity="center_vertical"
         android:paddingHorizontal="16dp"

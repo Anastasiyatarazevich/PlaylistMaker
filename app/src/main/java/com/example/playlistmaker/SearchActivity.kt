@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -33,19 +35,32 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private var trackList = ArrayList<Track>()
-    private lateinit var nothingPlaceHolder: TextView
+    private var trackListSearchHistory = ArrayList<Track>()
+    private lateinit var nothingPlaceHolder: LinearLayout
     private lateinit var noConnectionPlaceholder: LinearLayout
     private lateinit var trackAdapter: TrackAdapter
+    private lateinit var trackHistoryAdapter: TrackAdapter
     private lateinit var buttonUpdate: Button
     private lateinit var recyclerView: RecyclerView
+
+    private lateinit var searchHistoryLayout: ScrollView
+    private lateinit var searchHistoryText: TextView
+    private lateinit var searchHistoryRecyclerView: RecyclerView
+    private lateinit var searchHistoryClearButton: Button
+    private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var listenerSharedPrefs: SharedPreferences.OnSharedPreferenceChangeListener
 
     private val iTunesService = retrofit.create(ITunesApiService::class.java)
 
     private var searchText: String? = null
 
     companion object {
-        private const val SEARCH_TEXT_KEY = "search_text_key"
+        private const val SEARCH_TEXT_KEY = "TEXT_KEY"
+        private const val SEARCH_HISTORY_SHARED_PREFS = "HISTORY_SP"
+        private const val SEARCH_HISTORY_KEY = "HISTORY_KEY"
     }
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,13 +70,79 @@ class SearchActivity : AppCompatActivity() {
         val back = findViewById<MaterialToolbar>(R.id.back_button)
         val searchInput = findViewById<EditText>(R.id.search_input)
         val clearButton = findViewById<ImageView>(R.id.clear_button)
+
+
         nothingPlaceHolder = findViewById(R.id.placeholder_nothing)
         noConnectionPlaceholder = findViewById(R.id.placeholder_no_connection)
         recyclerView = findViewById(R.id.recycler_view)
+        searchHistoryLayout = findViewById(R.id.search_history_layout)
+        searchHistoryText = findViewById(R.id.search_history_text)
+        searchHistoryRecyclerView = findViewById(R.id.search_history_recycler_view)
+        searchHistoryClearButton = findViewById(R.id.clear_history_button)
+        sharedPrefs = getSharedPreferences(SEARCH_HISTORY_SHARED_PREFS, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPrefs)
 
         trackAdapter = TrackAdapter(trackList)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = trackAdapter
+
+        trackHistoryAdapter = TrackAdapter(trackListSearchHistory)
+        searchHistoryRecyclerView.adapter = trackHistoryAdapter
+        searchHistoryRecyclerView.layoutManager = LinearLayoutManager(this)
+
+
+        trackAdapter.onClickTrack = { track: Track ->
+            searchHistory.addTrack(track)
+            updateSearchHistory()
+        }
+
+        trackHistoryAdapter.onClickTrack = { track: Track ->
+            searchHistory.addTrack(track)
+            updateSearchHistory()
+        }
+
+
+        listenerSharedPrefs =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
+                if (key == SEARCH_HISTORY_KEY) {
+                    trackListSearchHistory.clear()
+                    trackListSearchHistory.addAll(searchHistory.getHistory())
+                    trackHistoryAdapter.notifyDataSetChanged()
+                }
+            }
+
+        sharedPrefs.registerOnSharedPreferenceChangeListener(listenerSharedPrefs)
+
+
+        searchInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val query = searchInput.text.toString()
+                if (query.isNotEmpty()) {
+                    searchTracks(query)
+                }
+            }
+            false
+        }
+
+        searchInput.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus && searchInput.text.isNullOrEmpty()
+                && searchHistory.getHistory().isNotEmpty()
+            ) {
+                searchHistoryLayout.visibility = View.VISIBLE
+                trackListSearchHistory.addAll(searchHistory.getHistory())
+                trackHistoryAdapter.notifyDataSetChanged()
+            } else {
+                searchHistoryLayout.visibility = View.GONE
+            }
+        }
+
+        searchHistoryClearButton.setOnClickListener {
+            searchHistory.clearHistory()
+            updateSearchHistory()
+            searchHistoryLayout.visibility = View.GONE
+        }
+
+
 
         if (savedInstanceState != null) {
             searchText = savedInstanceState.getString(SEARCH_TEXT_KEY)
@@ -95,6 +176,18 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
                 clearButton.visibility = clearButtonVisibility(s)
+
+
+                if (searchInput.hasFocus() && s?.isNullOrEmpty() == true
+                    && searchHistory.getHistory().isNotEmpty()
+                ) {
+                    searchHistoryLayout.visibility = View.VISIBLE
+                    updateSearchHistory()
+                } else {
+                    searchHistoryLayout.visibility = View.GONE
+                    trackList.clear()
+                    trackAdapter.notifyDataSetChanged()
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -113,10 +206,17 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    fun updateSearchHistory() {
+        trackListSearchHistory.clear()
+        trackListSearchHistory.addAll(searchHistory.getHistory())
+        trackHistoryAdapter.notifyDataSetChanged()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_TEXT_KEY, searchText)
     }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
