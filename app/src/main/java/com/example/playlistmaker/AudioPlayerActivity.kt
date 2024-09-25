@@ -80,7 +80,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         nameTrackData.text = track.trackName
         singerTrackData.text = track.artistName
         timeTrackData.text = track.getTimeTrack()
-        yearTrackData.text = track.getYearTrack()
+        yearTrackData.text = track.releaseDate.substringBefore("-")
         genreTrackData.text = track.primaryGenreName
         countryTrackData.text = track.country
 
