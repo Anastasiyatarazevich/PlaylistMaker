@@ -56,9 +56,9 @@ class SearchActivity : AppCompatActivity() {
     private var searchText: String? = null
 
     companion object {
-        private const val SEARCH_TEXT_KEY = "text_key"
-        private const val SEARCH_HISTORY_SHARED_PREFS = "history_shared_prefs"
-        private const val SEARCH_HISTORY_KEY = "history_key"
+        private const val SEARCH_TEXT_KEY = "TEXT_KEY"
+        private const val SEARCH_HISTORY_SHARED_PREFS = "HISTORY_SP"
+        private const val SEARCH_HISTORY_KEY = "HISTORY_KEY"
     }
 
 

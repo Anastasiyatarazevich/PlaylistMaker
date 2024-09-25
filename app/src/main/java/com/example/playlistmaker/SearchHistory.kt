@@ -9,7 +9,7 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
     private val trackHistoryList = getHistory().toMutableList()
 
     companion object {
-        private const val SEARCH_HISTORY_KEY = "history_key"
+        private const val SEARCH_HISTORY_KEY = "HISTORY_KEY"
         private const val MAX_HISTORY_SIZE = 10
     }
 
