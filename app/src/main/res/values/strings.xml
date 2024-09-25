@@ -14,4 +14,8 @@
     <string name="support_message">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="agreement_url">https://yandex.ru/legal/practicum_offer/</string>
     <string name="share_text_fail">Почтовое приложение не найдено</string>
+    <string name="update">Обновить</string>
+    <string name="nothing_was_found">Ничего не нашлось</string>
+    <string name="no_connection">Проблемы со связью</string>
+    <string name="download_failed">Загрузка не удалась. Проверьте подключение к интернету</string>
 </resources>
