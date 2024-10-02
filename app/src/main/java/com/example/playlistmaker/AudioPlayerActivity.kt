@@ -98,7 +98,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.place_holder_312)
-            .transform(RoundedCorners(ViewUtils.dpToPx(2f, this)))
+            .transform(RoundedCorners(ViewUtils.dpToPx(8f, this)))
             .into(placeholderTrack)
     }
 

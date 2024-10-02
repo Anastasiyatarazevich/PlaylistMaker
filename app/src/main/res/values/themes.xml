@@ -16,7 +16,7 @@
         <item name="textAppearanceBodyMedium">@color/black</item>
         <item name="textAppearanceBodySmall">@color/gray</item>
         <item name="buttonTint">@color/dark_gray</item>
-
+        <item name="android:iconTint">@color/dark_gray</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
