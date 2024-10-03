@@ -16,6 +16,6 @@
         <item name="textAppearanceBodyMedium">@color/white</item>
         <item name="textAppearanceBodySmall">@color/white</item>
         <item name="buttonTint">@color/white</item>
-
+        <item name="android:iconTint">@color/white</item>
     </style>
 </resources>
