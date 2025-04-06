@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -13,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -57,15 +60,44 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchText: String? = null
 
+    private lateinit var searchInput: EditText
 
-    @SuppressLint("MissingInflatedId")
+    private lateinit var progressBar: ProgressBar
+
+    private val handler = Handler(Looper.getMainLooper())
+
+    private val searchRunnable = Runnable {
+        val query = searchInput.text.toString()
+        if (query.isNotEmpty()) {
+            searchTracks(query)
+        }
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private var isClickAllowed = true
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
         val back = findViewById<MaterialToolbar>(R.id.back_button)
-        val searchInput = findViewById<EditText>(R.id.search_input)
+        searchInput = findViewById(R.id.search_input)
         val clearButton = findViewById<ImageView>(R.id.clear_button)
+
+        progressBar = findViewById(R.id.progress_bar)
 
 
         nothingPlaceHolder = findViewById(R.id.placeholder_nothing)
@@ -86,21 +118,21 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryRecyclerView.adapter = trackHistoryAdapter
         searchHistoryRecyclerView.layoutManager = LinearLayoutManager(this)
 
-
-
         trackAdapter.onClickTrack = { track: Track ->
-            searchHistory.addTrack(track)
-            updateSearchHistory()
-            goToInfo(track)
+            if (clickDebounce()) {
+                searchHistory.addTrack(track)
+                updateSearchHistory()
+                goToInfo(track)
+            }
         }
 
         trackHistoryAdapter.onClickTrack = { track: Track ->
-            searchHistory.addTrack(track)
-            updateSearchHistory()
-            goToInfo(track)
+            if (clickDebounce()) {
+                searchHistory.addTrack(track)
+                updateSearchHistory()
+                goToInfo(track)
+            }
         }
-
-
 
         listenerSharedPrefs =
             SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
@@ -142,8 +174,6 @@ class SearchActivity : AppCompatActivity() {
             searchHistoryLayout.isVisible = false
         }
 
-
-
         if (savedInstanceState != null) {
             searchText = savedInstanceState.getString(SEARCH_TEXT_KEY)
             searchInput.setText(searchText)
@@ -172,15 +202,10 @@ class SearchActivity : AppCompatActivity() {
 
         searchInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
                 clearButton.visibility = clearButtonVisibility(s)
-
-
-                if (searchInput.hasFocus() && s?.isNullOrEmpty() == true
-                    && searchHistory.getHistory().isNotEmpty()
-                ) {
+                if (searchInput.hasFocus() && s.isNullOrEmpty() && searchHistory.getHistory().isNotEmpty()) {
                     searchHistoryLayout.isVisible = true
                     updateSearchHistory()
                 } else {
@@ -188,8 +213,10 @@ class SearchActivity : AppCompatActivity() {
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
                 }
+                if (!s.isNullOrEmpty()) {
+                    searchDebounce()
+                }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -200,9 +227,7 @@ class SearchActivity : AppCompatActivity() {
                     searchTracks(query)
                 }
                 true
-            }
-            false
-
+            } else false
         }
     }
 
@@ -212,6 +237,7 @@ class SearchActivity : AppCompatActivity() {
         startActivity(audioPlayerIntent)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateSearchHistory() {
         trackListSearchHistory.clear()
         trackListSearchHistory.addAll(searchHistory.getHistory())
@@ -247,44 +273,49 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun searchTracks(term: String) {
-        iTunesService.searchTracks(term)
-            .enqueue(object : Callback<TracksResponse> {
-                override fun onResponse(
-                    call: Call<TracksResponse>,
-                    response: Response<TracksResponse>
-                ) {
-                    val tracksResponse = response.body()
-                    if (tracksResponse != null && tracksResponse.results.isNotEmpty()) {
-                        trackList.clear()
-                        trackList.addAll(tracksResponse.results)
-                        trackAdapter.notifyDataSetChanged()
-                        recyclerView.isVisible = true
-                        nothingPlaceHolder.isVisible = false
-                        noConnectionPlaceholder.isVisible = false
-                    } else {
-                        trackList.clear()
-                        trackAdapter.notifyDataSetChanged()
-                        recyclerView.isVisible = false
-                        nothingPlaceHolder.isVisible = true
-                        noConnectionPlaceholder.isVisible = false
-                    }
-                }
-
-                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+    progressBar.visibility = View.VISIBLE
+    iTunesService.searchTracks(term)
+        .enqueue(object : Callback<TracksResponse> {
+            override fun onResponse(
+                call: Call<TracksResponse>,
+                response: Response<TracksResponse>
+            ) {
+                progressBar.visibility = View.GONE
+                val tracksResponse = response.body()
+                if (tracksResponse != null && tracksResponse.results.isNotEmpty()) {
+                    trackList.clear()
+                    trackList.addAll(tracksResponse.results)
+                    trackAdapter.notifyDataSetChanged()
+                    recyclerView.isVisible = true
+                    nothingPlaceHolder.isVisible = false
+                    noConnectionPlaceholder.isVisible = false
+                } else {
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
                     recyclerView.isVisible = false
-                    nothingPlaceHolder.isVisible = false
-                    noConnectionPlaceholder.isVisible = true
+                    nothingPlaceHolder.isVisible = true
+                    noConnectionPlaceholder.isVisible = false
                 }
-            })
-    }
+            }
+            override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                progressBar.visibility = View.GONE
+                trackList.clear()
+                trackAdapter.notifyDataSetChanged()
+                recyclerView.isVisible = false
+                nothingPlaceHolder.isVisible = false
+                noConnectionPlaceholder.isVisible = true
+            }
+        })
+}
 
     companion object {
         private const val SEARCH_TEXT_KEY = "TEXT_KEY"
         private const val SEARCH_HISTORY_SHARED_PREFS = "HISTORY_SP"
         private const val SEARCH_HISTORY_KEY = "HISTORY_KEY"
         private const val TRACK = "TRACK_DATA"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
