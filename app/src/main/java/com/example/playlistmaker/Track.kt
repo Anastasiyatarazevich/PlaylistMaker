@@ -10,5 +10,6 @@ data class Track(
     val collectionName: String,
     val releaseDate: String?,
     val genreName: String,
-    val country: String
+    val country: String,
+    val previewUrl: String
 )

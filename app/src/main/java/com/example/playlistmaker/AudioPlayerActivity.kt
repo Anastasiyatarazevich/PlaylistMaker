@@ -1,6 +1,9 @@
 package com.example.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -37,6 +40,20 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var countryTrackData: TextView
 
 
+    private lateinit var mediaPlayer: MediaPlayer
+    private var playerState = STATE_DEFAULT
+    private lateinit var handler: Handler
+    private val updateProgressRunnable = object : Runnable {
+        override fun run() {
+            if (playerState == STATE_PLAYING) {
+                timePlayTrack.text = SimpleDateFormat("mm:ss", Locale.getDefault())
+                    .format(mediaPlayer.currentPosition)
+                handler.postDelayed(this, UPDATE_INTERVAL)
+            }
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
@@ -51,10 +68,37 @@ class AudioPlayerActivity : AppCompatActivity() {
             return
         }
         setDataTrack()
+
         timePlayTrack.text = TIME_PLAY_TRACK
+        playTrackButton.setImageResource(R.drawable.play)
+
+
         backButton.setNavigationOnClickListener {
+            if (playerState == STATE_PLAYING) {
+                pausePlayer()
+            }
             finish()
         }
+
+
+        handler = Handler(Looper.getMainLooper())
+        mediaPlayer = MediaPlayer()
+        preparePlayer()
+
+        playTrackButton.setOnClickListener {
+            when (playerState) {
+                STATE_PLAYING -> {
+                    pausePlayer()
+                }
+                STATE_PREPARED, STATE_PAUSED -> {
+                    if (mediaPlayer.currentPosition >= mediaPlayer.duration) {
+                        mediaPlayer.seekTo(0)
+                    }
+                    startPlayer()
+                }
+            }
+        }
+
     }
 
     private fun initViews() {
@@ -102,8 +146,68 @@ class AudioPlayerActivity : AppCompatActivity() {
             .into(placeholderTrack)
     }
 
+
+    private fun preparePlayer() {
+        val previewUrl = track.previewUrl
+        if (previewUrl.isNullOrEmpty()) {
+            playTrackButton.isEnabled = false
+            return
+        }
+        try {
+            mediaPlayer.setDataSource(previewUrl)
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                playTrackButton.isEnabled = true
+                playerState = STATE_PREPARED
+            }
+            mediaPlayer.setOnCompletionListener {
+                playTrackButton.setImageResource(R.drawable.play)
+                playerState = STATE_PREPARED
+                mediaPlayer.seekTo(0)
+                timePlayTrack.text = "00:00"
+                handler.removeCallbacks(updateProgressRunnable)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playTrackButton.setImageResource(R.drawable.pause)
+        playerState = STATE_PLAYING
+        handler.post(updateProgressRunnable)
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playTrackButton.setImageResource(R.drawable.play)
+        playerState = STATE_PAUSED
+        handler.removeCallbacks(updateProgressRunnable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (playerState == STATE_PLAYING) {
+            pausePlayer()
+        }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+
     companion object {
         private const val TRACK = "TRACK_DATA"
         private const val TIME_PLAY_TRACK = "0:30"
+
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val UPDATE_INTERVAL = 300L
     }
 }
