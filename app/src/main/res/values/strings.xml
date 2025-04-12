@@ -7,7 +7,8 @@
     <string name="settings">Настройки</string>
     <string name="search">Поиск</string>
     <string name="media">Медиатека</string>
-    <string name="share_text">Хочу порекомендовать курс по Андроид-разработке в Практикуме: https://practicum.yandex.ru/profile/android-developer/?from=catalog</string>
+    <string name="share_text">Хочу порекомендовать курс по Андроид-разработке в Практикуме</string>
+    <string name="share_app_link">https://practicum.yandex.ru/profile/android-developer/?from=catalog</string>
     <string name="share_title">Поделиться приложением</string>
     <string name="support_email">anastasiya.tarazevich22@gmail.com</string>
     <string name="support_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
