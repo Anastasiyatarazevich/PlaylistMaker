@@ -3,8 +3,8 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.PreferenceKeys.PREFS_NAME
-import com.example.playlistmaker.PreferenceKeys.PREF_THEME_KEY
+import com.example.playlistmaker.util.PreferenceKeys.PREFS_NAME
+import com.example.playlistmaker.util.PreferenceKeys.PREF_THEME_KEY
 
 class App : Application() {
 

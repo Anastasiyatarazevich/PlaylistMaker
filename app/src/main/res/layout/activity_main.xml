@@ -39,7 +39,7 @@
             android:id="@+id/search"
             style="@style/MenuButtons"
             android:text="@string/search"
-            app:icon="@drawable/light_mode_search"/>
+            app:icon="@drawable/search"/>
 
         <Button
             android:id="@+id/library"
