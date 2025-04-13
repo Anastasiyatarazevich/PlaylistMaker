@@ -31,9 +31,9 @@ class AudioPlayerViewModel(
         }
 
         interactor.setCompletionListener {
-            screenState.value = AudioPlayerState.Content(track, "00:30", isPlaying = false)
+            screenState.value = AudioPlayerState.Content(track, TIME_PLAY_TRACK, isPlaying = false)
         }
-        screenState.value = AudioPlayerState.Content(track, "00:30", isPlaying = false)
+        screenState.value = AudioPlayerState.Content(track, TIME_PLAY_TRACK, isPlaying = false)
     }
 
     fun togglePlayback() {
@@ -57,6 +57,7 @@ class AudioPlayerViewModel(
     }
 
     companion object {
+        private const val TIME_PLAY_TRACK = "0:30"
         fun getViewModelFactory(
             track: Track,
             interactor: AudioPlayerInteractor
@@ -68,4 +69,5 @@ class AudioPlayerViewModel(
                 }
             }
     }
+
 }

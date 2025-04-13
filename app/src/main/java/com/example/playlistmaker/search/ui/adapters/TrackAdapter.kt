@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.databinding.TrackItemBinding
 import com.example.playlistmaker.models.Track
+import android.text.format.DateFormat
 
 class TrackAdapter(private val trackList: List<Track>) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
@@ -30,7 +31,7 @@ class TrackAdapter(private val trackList: List<Track>) : RecyclerView.Adapter<Tr
         fun bind(track: Track) {
             binding.trackName.text = track.trackName
             binding.artistName.text = track.artistName
-            binding.trackTime.text = android.text.format.DateFormat.format("mm:ss", track.trackTimeMillis)
+            binding.trackTime.text = DateFormat.format("mm:ss", track.trackTimeMillis)
             Glide.with(binding.root.context)
                 .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
                 .placeholder(com.example.playlistmaker.R.drawable.placeholder)

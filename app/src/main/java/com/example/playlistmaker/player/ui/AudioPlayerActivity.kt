@@ -50,8 +50,8 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.trackSinger.text = track.artistName
         binding.timeTrackInfo.text = SimpleDateFormat("mm:ss", Locale.getDefault())
             .format(track.trackTimeMillis)
-        binding.yearTrackInfo.text = track.releaseDate?.substringBefore("-") ?: "N/A"
-        binding.genreTrackInfo.text = track.genreName ?: "N/A"
+        binding.yearTrackInfo.text = track.releaseDate?.substringBefore("-") ?: RES_NO
+        binding.genreTrackInfo.text = track.genreName ?: RES_NO
         binding.countryTrackInfo.text = track.country
 
         if (track.collectionName.isNullOrEmpty()) {
@@ -121,5 +121,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     companion object {
         const val TRACK = "TRACK_DATA"
         private const val TIME_PLAY_TRACK = "0:30"
+        private const val RES_NO = "N/A"
     }
 }

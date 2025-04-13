@@ -12,19 +12,26 @@
         style="@style/MaterialToolbar"
         app:title="@string/search" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginStart="@dimen/margin_small"
         android:layout_marginTop="@dimen/padding_small"
         android:layout_marginEnd="@dimen/margin_small"
         android:background="@drawable/rounded_edittext"
-        android:paddingStart="@dimen/padding_small"
-        android:paddingEnd="@dimen/padding_small">
+        android:paddingStart="@dimen/padding_small2"
+        android:paddingEnd="@dimen/padding_small2">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_small"
+            android:layout_height="@dimen/icon_size_small"
+            android:layout_gravity="end"
+            android:src="@drawable/search"
+            app:tint='?attr/editTextColor' />
 
         <EditText
-            android:id="@+id/search_input"
-            style="@style/EditTextSearch"
+            android:id="@+id/searchInput"
+            style="@style/EditTextSearch1"
             android:imeOptions="actionDone"
             android:singleLine="true"
             android:textCursorDrawable="@drawable/cursor_color" />
@@ -34,12 +41,10 @@
             android:layout_width="@dimen/icon_size_small"
             android:layout_height="@dimen/icon_size_small"
             android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/margin_small2"
-            android:src="@drawable/delete"
-            android:visibility="gone"
+            android:src="@drawable/clear"
             app:tint='?attr/editTextColor' />
 
-    </FrameLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -143,7 +148,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="140dp"
-        android:visibility="gone"
-        android:indeterminateTint="@color/background_blue"/>
+        android:indeterminateTint="@color/background_blue"
+        android:visibility="gone" />
 
 </LinearLayout>

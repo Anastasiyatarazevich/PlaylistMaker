@@ -8,7 +8,7 @@ import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.TracksRepository
-import com.example.playlistmaker.search.data.impl.SearchTracksInteractorImpl
+import com.example.playlistmaker.search.domain.SearchTracksInteractorImpl
 import com.example.playlistmaker.player.data.AudioPlayerInteractorImpl
 import com.example.playlistmaker.player.domain.AudioPlayerInteractor
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
