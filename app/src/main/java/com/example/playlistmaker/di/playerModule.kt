@@ -1,6 +1,8 @@
 package com.example.playlistmaker.di
 
+import android.media.MediaPlayer
 import com.example.playlistmaker.models.Track
+import com.example.playlistmaker.player.data.AudioPlayerHelper
 import com.example.playlistmaker.player.data.AudioPlayerInteractorImpl
 import com.example.playlistmaker.player.domain.AudioPlayerInteractor
 import com.example.playlistmaker.player.ui.viewmodel.AudioPlayerViewModel
@@ -12,7 +14,18 @@ val playerModule = module {
         AudioPlayerInteractorImpl()
     }
 
-    viewModel { (track: Track) ->
-        AudioPlayerViewModel(get(), track)
+    factory { MediaPlayer() }
+
+    factory { (track: Track) ->
+        val player = get<MediaPlayer>()
+        AudioPlayerHelper(track, player)
+    }
+
+    viewModel { (trackJson: String) ->
+        AudioPlayerViewModel(
+            interactor = get(),
+            gson = get(),
+            trackJson = trackJson
+        )
     }
 }

@@ -7,10 +7,12 @@ import com.example.playlistmaker.models.Track
 import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.example.playlistmaker.search.domain.SearchState
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
+import com.google.gson.Gson
 
 class SearchViewModel(
     private val searchTracksInteractor: SearchTracksInteractor,
-    private val searchHistoryRepository: SearchHistoryRepository
+    private val searchHistoryRepository: SearchHistoryRepository,
+    private val gson: Gson
 ) : ViewModel() {
 
     private val screenState = MutableLiveData<SearchState>()
@@ -45,5 +47,9 @@ class SearchViewModel(
     fun clearHistory() {
         searchHistoryRepository.clearHistory()
         history.value = searchHistoryRepository.getHistory()
+    }
+
+    fun jsonTrack(track: Track): String {
+        return gson.toJson(track)
     }
 }

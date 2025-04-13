@@ -31,13 +31,17 @@ val searchModule = module {
 
     factory<SearchHistoryRepository> { (context: Context) ->
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        SearchHistoryRepositoryImpl(sharedPrefs)
+        SearchHistoryRepositoryImpl(
+            sharedPrefs = sharedPrefs,
+            gson = get()
+        )
     }
 
     viewModel { (context: Context) ->
         SearchViewModel(
             searchTracksInteractor = get(),
-            searchHistoryRepository = get { parametersOf(context) }
+            searchHistoryRepository = get { parametersOf(context) },
+            gson = get()
         )
     }
 }

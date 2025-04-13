@@ -18,14 +18,13 @@ import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.search.domain.SearchState
 import com.example.playlistmaker.search.ui.adapters.TrackAdapter
 import com.example.playlistmaker.search.ui.viewmodel.SearchViewModel
-import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-private val viewModel: SearchViewModel by viewModel { parametersOf(this) }
+    private val viewModel: SearchViewModel by viewModel { parametersOf(this) }
 
     private var trackList = ArrayList<Track>()
     private var trackHistoryList = ArrayList<Track>()
@@ -189,8 +188,9 @@ private val viewModel: SearchViewModel by viewModel { parametersOf(this) }
     }
 
     private fun goToAudioPlayer(track: Track) {
+        val trackJson = viewModel.jsonTrack(track)
         val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra(TRACK, Gson().toJson(track))
+        intent.putExtra(TRACK, trackJson)
         startActivity(intent)
     }
 

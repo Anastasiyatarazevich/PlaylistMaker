@@ -2,13 +2,15 @@ package com.example.playlistmaker.player.data
 
 import com.example.playlistmaker.player.domain.AudioPlayerInteractor
 import com.example.playlistmaker.models.Track
+import org.koin.core.parameter.parametersOf
+import org.koin.java.KoinJavaComponent.getKoin
 
 class AudioPlayerInteractorImpl() : AudioPlayerInteractor {
 
     private var audioPlayerHelper: AudioPlayerHelper? = null
 
     override fun initialize(track: Track) {
-        audioPlayerHelper = AudioPlayerHelper(track)
+        audioPlayerHelper = getKoin().get<AudioPlayerHelper> { parametersOf(track) }
     }
 
     override fun togglePlayback() {

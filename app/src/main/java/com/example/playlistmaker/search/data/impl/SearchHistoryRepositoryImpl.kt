@@ -6,7 +6,9 @@ import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SearchHistoryRepositoryImpl(private val sharedPrefs: SharedPreferences) :
+class SearchHistoryRepositoryImpl(
+    private val sharedPrefs: SharedPreferences,
+    private val gson: Gson) :
     SearchHistoryRepository {
 
     override fun addTrack(track: Track) {
@@ -24,7 +26,7 @@ class SearchHistoryRepositoryImpl(private val sharedPrefs: SharedPreferences) :
         val json = sharedPrefs.getString(SEARCH_HISTORY_KEY, null)
         return if (!json.isNullOrEmpty()) {
             val type = object : TypeToken<List<Track>>() {}.type
-            Gson().fromJson(json, type)
+            gson.fromJson(json, type)
         } else {
             emptyList()
         }
@@ -35,7 +37,7 @@ class SearchHistoryRepositoryImpl(private val sharedPrefs: SharedPreferences) :
     }
 
     private fun saveHistory(list: List<Track>) {
-        val json = Gson().toJson(list)
+        val json = gson.toJson(list)
         sharedPrefs.edit().putString(SEARCH_HISTORY_KEY, json).apply()
     }
 
