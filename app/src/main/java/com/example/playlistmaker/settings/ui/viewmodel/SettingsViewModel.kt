@@ -36,14 +36,4 @@ class SettingsViewModel(
     fun openAgreement() {
         sharingInteractor.openTerms()
     }
-
-    class Factory(
-        private val settingsRepository: SettingsRepository,
-        private val sharingInteractor: SharingInteractor
-    ) : androidx.lifecycle.ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SettingsViewModel(settingsRepository, sharingInteractor) as T
-        }
-    }
 }

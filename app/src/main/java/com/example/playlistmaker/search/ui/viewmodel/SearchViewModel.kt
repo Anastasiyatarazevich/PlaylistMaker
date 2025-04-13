@@ -42,16 +42,8 @@ class SearchViewModel(
         history.value = searchHistoryRepository.getHistory()
     }
 
-    companion object {
-        fun getViewModelFactory(
-            searchTracksInteractor: SearchTracksInteractor,
-            searchHistoryRepository: SearchHistoryRepository
-        ): androidx.lifecycle.ViewModelProvider.Factory =
-            object : androidx.lifecycle.ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return SearchViewModel(searchTracksInteractor, searchHistoryRepository) as T
-                }
-            }
+    fun clearHistory() {
+        searchHistoryRepository.clearHistory()
+        history.value = searchHistoryRepository.getHistory()
     }
 }

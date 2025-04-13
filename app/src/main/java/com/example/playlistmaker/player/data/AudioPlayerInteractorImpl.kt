@@ -3,7 +3,7 @@ package com.example.playlistmaker.player.data
 import com.example.playlistmaker.player.domain.AudioPlayerInteractor
 import com.example.playlistmaker.models.Track
 
-class AudioPlayerInteractorImpl : AudioPlayerInteractor {
+class AudioPlayerInteractorImpl() : AudioPlayerInteractor {
 
     private var audioPlayerHelper: AudioPlayerHelper? = null
 

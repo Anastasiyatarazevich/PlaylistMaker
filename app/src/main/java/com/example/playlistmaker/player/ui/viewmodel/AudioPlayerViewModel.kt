@@ -58,16 +58,6 @@ class AudioPlayerViewModel(
 
     companion object {
         private const val TIME_PLAY_TRACK = "0:30"
-        fun getViewModelFactory(
-            track: Track,
-            interactor: AudioPlayerInteractor
-        ): androidx.lifecycle.ViewModelProvider.Factory =
-            object : androidx.lifecycle.ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return AudioPlayerViewModel(interactor, track) as T
-                }
-            }
     }
 
 }

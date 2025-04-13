@@ -3,13 +3,25 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.di.playerModule
+import com.example.playlistmaker.di.searchModule
+import com.example.playlistmaker.di.settingsModule
+import com.example.playlistmaker.di.sharingModule
 import com.example.playlistmaker.util.PreferenceKeys.PREFS_NAME
 import com.example.playlistmaker.util.PreferenceKeys.PREF_THEME_KEY
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        startKoin {
+            androidContext(this@App)
+            modules(playerModule, searchModule, settingsModule, sharingModule)
+        }
+
         val sharedPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
         if (!sharedPrefs.contains(PREF_THEME_KEY)) {

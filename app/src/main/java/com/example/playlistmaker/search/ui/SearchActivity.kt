@@ -11,7 +11,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.models.Track
@@ -19,13 +18,14 @@ import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.search.domain.SearchState
 import com.example.playlistmaker.search.ui.adapters.TrackAdapter
 import com.example.playlistmaker.search.ui.viewmodel.SearchViewModel
-import com.example.playlistmaker.util.Creator
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
+private val viewModel: SearchViewModel by viewModel { parametersOf(this) }
 
     private var trackList = ArrayList<Track>()
     private var trackHistoryList = ArrayList<Track>()
@@ -70,13 +70,6 @@ class SearchActivity : AppCompatActivity() {
         trackHistoryAdapter = TrackAdapter(trackHistoryList)
         binding.searchHistoryRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.searchHistoryRecyclerView.adapter = trackHistoryAdapter
-
-        val searchInteractor = Creator.provideSearchTracksInteractor()
-        val historyRepository = Creator.getSearchHistoryRepository(this)
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory(searchInteractor, historyRepository)
-        ).get(SearchViewModel::class.java)
 
         viewModel.getScreenState().observe(this) { state ->
             when (state) {
@@ -142,7 +135,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.clearHistoryButton.setOnClickListener {
-            historyRepository.clearHistory()
+            viewModel.clearHistory()
             binding.searchHistoryLayout.visibility = View.GONE
         }
 
