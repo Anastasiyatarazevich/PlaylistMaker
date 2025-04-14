@@ -7,8 +7,10 @@ import com.example.playlistmaker.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioPlayerHelper(private val track: Track) {
-    private val mediaPlayer: MediaPlayer = MediaPlayer()
+class AudioPlayerHelper(
+    private val track: Track,
+    private val mediaPlayer: MediaPlayer
+) {
     private val handler = Handler(Looper.getMainLooper())
     var playerState = STATE_DEFAULT
         private set
