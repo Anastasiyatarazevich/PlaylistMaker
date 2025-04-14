@@ -188,9 +188,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun goToAudioPlayer(track: Track) {
-        val trackJson = viewModel.jsonTrack(track)
         val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra(TRACK, trackJson)
+        intent.putExtra(TRACK, track)
         startActivity(intent)
     }
 

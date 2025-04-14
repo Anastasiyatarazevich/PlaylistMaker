@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("plugin.parcelize")
 }
 
 android {
@@ -50,10 +51,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
     implementation(libs.glide.lib)
     annotationProcessor(libs.glide.compiler)
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.gson.converter)
     implementation(libs.koin.android)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.fragment.ktx)
+
 }

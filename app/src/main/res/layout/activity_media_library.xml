@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".media.ui.MediaLibraryActivity">
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical">
 
-    <TextView
-        style="@style/TextView"
-        android:text="@string/media"/>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/back_button"
+        style="@style/MaterialToolbar"
+        app:title="@string/media" />
 
-</FrameLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        app:tabRippleColor="@null"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:tabIndicatorColor="?attr/textAppearanceBody2"
+        app:tabIndicatorFullWidth="false"
+        app:tabMode="fixed"
+        android:background="@color/transparent"
+        app:tabTextColor="?attr/textAppearanceBody2"
+        />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

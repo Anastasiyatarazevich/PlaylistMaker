@@ -27,8 +27,8 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val trackJson = intent.getStringExtra(TRACK) ?: ""
-        viewModel = getViewModel { parametersOf(trackJson) }
+        val track = intent.getParcelableExtra<Track>(TRACK)
+        viewModel = getViewModel { parametersOf(track) }
         setupObservers()
         setupPlaybackUI()
     }

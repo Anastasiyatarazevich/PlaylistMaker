@@ -40,8 +40,7 @@ val searchModule = module {
     viewModel { (context: Context) ->
         SearchViewModel(
             searchTracksInteractor = get(),
-            searchHistoryRepository = get { parametersOf(context) },
-            gson = get()
+            searchHistoryRepository = get { parametersOf(context) }
         )
     }
 }
