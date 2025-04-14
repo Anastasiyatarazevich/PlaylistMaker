@@ -21,11 +21,10 @@ val playerModule = module {
         AudioPlayerHelper(track, player)
     }
 
-    viewModel { (trackJson: String) ->
+    viewModel { (track: Track) ->
         AudioPlayerViewModel(
             interactor = get(),
-            gson = get(),
-            trackJson = trackJson
+            track = track
         )
     }
 }

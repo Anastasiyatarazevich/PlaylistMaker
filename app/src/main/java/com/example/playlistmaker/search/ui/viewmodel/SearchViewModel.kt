@@ -12,7 +12,6 @@ import com.google.gson.Gson
 class SearchViewModel(
     private val searchTracksInteractor: SearchTracksInteractor,
     private val searchHistoryRepository: SearchHistoryRepository,
-    private val gson: Gson
 ) : ViewModel() {
 
     private val screenState = MutableLiveData<SearchState>()
@@ -47,9 +46,5 @@ class SearchViewModel(
     fun clearHistory() {
         searchHistoryRepository.clearHistory()
         history.value = searchHistoryRepository.getHistory()
-    }
-
-    fun jsonTrack(track: Track): String {
-        return gson.toJson(track)
     }
 }
