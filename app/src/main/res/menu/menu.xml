@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/searchFragment"
+        android:title="@string/search"
+        android:icon="@drawable/search" />
+    <item
+        android:id="@+id/mediaLibraryFragment"
+        android:title="@string/media"
+        android:icon="@drawable/light_mode_library" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:title="@string/settings"
+        android:icon="@drawable/light_mode_settings" />
+</menu>

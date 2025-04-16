@@ -6,41 +6,25 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.media.ui.MediaLibraryActivity
-import com.example.playlistmaker.search.ui.SearchActivity
-import com.example.playlistmaker.settings.ui.SettingsActivity
+
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //1 способ через анонимный класс
-        val search = findViewById<Button>(R.id.search)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
 
-        val searchClickListener: View.OnClickListener = object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                val displayIntent = Intent(this@MainActivity, SearchActivity::class.java)
-                startActivity(displayIntent)
-            }
-        }
-        search.setOnClickListener(searchClickListener)
-
-        //2 способ через лямбду
-        val library = findViewById<Button>(R.id.library)
-        library.setOnClickListener {
-            val displayIntent = Intent(this, MediaLibraryActivity::class.java)
-            startActivity(displayIntent)
-        }
-
-        val settings = findViewById<Button>(R.id.settings)
-        settings.setOnClickListener{
-            val displayIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(displayIntent)
-        }
-
+        bottomNav.setupWithNavController(navController)
     }
 }
