@@ -95,7 +95,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="elevation">4dp</item>
-        <item name="navigationIcon">@drawable/light_mode_back</item>
         <item name="titleTextColor">?attr/textAppearanceBody2</item>
         <item name="titleTextAppearance">@style/TextViewHeader</item>
     </style>

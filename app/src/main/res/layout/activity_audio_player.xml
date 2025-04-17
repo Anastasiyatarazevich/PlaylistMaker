@@ -7,12 +7,12 @@
     android:background="?attr/colorSecondary"
     tools:context=".player.ui.AudioPlayerActivity">
 
-
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back_button"
         style="@style/MaterialToolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/light_mode_back" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideLine"
