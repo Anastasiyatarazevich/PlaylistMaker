@@ -1,10 +1,10 @@
 package com.example.playlistmaker.player.domain
 
-
-interface AudioPlayerInteractor {
-    fun togglePlayback()
-    fun pausePlayback()
-    fun releasePlayer()
+interface AudioPlayerRepository {
+    val playerState: Int
+    fun startPlayer()
+    fun pausePlayer()
+    fun release()
     fun setProgressListener(listener: (String) -> Unit)
     fun setCompletionListener(listener: () -> Unit)
 }

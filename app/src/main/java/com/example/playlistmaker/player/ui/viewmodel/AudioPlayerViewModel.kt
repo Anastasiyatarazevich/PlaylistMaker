@@ -16,12 +16,8 @@ class AudioPlayerViewModel(
 
     fun getThemeSettings(): LiveData<AudioPlayerState> = screenState
 
-
     init {
         screenState.value = AudioPlayerState.Loading
-
-
-        interactor.initialize(track)
 
         interactor.setProgressListener { currentTime ->
             val currentState = screenState.value

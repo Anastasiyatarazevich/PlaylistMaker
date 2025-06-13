@@ -2,6 +2,7 @@ package com.example.playlistmaker.player.data
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.models.Track
+import com.example.playlistmaker.player.domain.AudioPlayerRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,12 +14,12 @@ import java.util.Locale
 class AudioPlayerHelper(
     private val track: Track,
     private val mediaPlayer: MediaPlayer
-) {
-    var playerState = STATE_DEFAULT
+) : AudioPlayerRepository {
+    override var playerState = STATE_DEFAULT
     private var progressJob: Job? = null
 
-    var onProgressUpdate: ((String) -> Unit)? = null
-    var onCompletion: (() -> Unit)? = null
+    private var onProgressUpdate: ((String) -> Unit)? = null
+    private var onCompletion: (() -> Unit)? = null
 
     init {
         preparePlayer()
@@ -46,7 +47,7 @@ class AudioPlayerHelper(
         }
     }
 
-    fun startPlayer() {
+    override fun startPlayer() {
         if (playerState == STATE_PREPARED || playerState == STATE_PAUSED) {
             if (mediaPlayer.currentPosition >= mediaPlayer.duration) {
                 mediaPlayer.seekTo(0)
@@ -57,7 +58,7 @@ class AudioPlayerHelper(
         }
     }
 
-    fun pausePlayer() {
+    override  fun pausePlayer() {
         if (playerState == STATE_PLAYING) {
             mediaPlayer.pause()
             playerState = STATE_PAUSED
@@ -65,9 +66,17 @@ class AudioPlayerHelper(
         }
     }
 
-    fun release() {
+  override  fun release() {
         progressJob?.cancel()
         mediaPlayer.release()
+    }
+
+    override fun setProgressListener(listener: (String) -> Unit) {
+        onProgressUpdate = listener
+    }
+
+    override fun setCompletionListener(listener: () -> Unit) {
+        onCompletion = listener
     }
 
     private fun startProgressLoop() {
