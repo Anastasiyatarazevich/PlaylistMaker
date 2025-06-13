@@ -3,39 +3,51 @@ package com.example.playlistmaker.search.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.models.Track
 import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.example.playlistmaker.search.domain.SearchState
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
-import com.google.gson.Gson
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
+
 
 class SearchViewModel(
     private val searchTracksInteractor: SearchTracksInteractor,
     private val searchHistoryRepository: SearchHistoryRepository,
 ) : ViewModel() {
 
-    private val screenState = MutableLiveData<SearchState>()
-    fun getScreenState(): LiveData<SearchState> = screenState
+    private val _screenState = MutableStateFlow<SearchState>(SearchState.Start)
+    val screenState: StateFlow<SearchState> = _screenState
+
+    private var searchJob: Job? = null
 
     private val history = MutableLiveData<List<Track>>()
     fun getHistory(): LiveData<List<Track>> = history
 
     init {
-        screenState.value = SearchState.Start
         history.value = searchHistoryRepository.getHistory()
     }
 
-    fun searchTracks(query: String) {
-        screenState.value = SearchState.Loading
-        searchTracksInteractor.searchTracks(query, object : SearchTracksInteractor.Consumer {
-            override fun consume(tracks: List<Track>) {
-                if (tracks.isEmpty()) {
-                    screenState.postValue(SearchState.Empty)
-                } else {
-                    screenState.postValue(SearchState.Content(tracks))
+    fun performSearchDebounced(query: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchTracksInteractor.searchTracks(query)
+                .map { tracks ->
+                    if (tracks.isEmpty()) SearchState.Empty else SearchState.Content(tracks)
                 }
-            }
-        })
+                .onStart { emit(SearchState.Loading) }
+                .collect { state ->
+                    _screenState.value = state
+                }
+        }
+        _screenState.value = SearchState.Loading
     }
 
     fun addTrackToHistory(track: Track) {
@@ -46,5 +58,9 @@ class SearchViewModel(
     fun clearHistory() {
         searchHistoryRepository.clearHistory()
         history.value = searchHistoryRepository.getHistory()
+    }
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

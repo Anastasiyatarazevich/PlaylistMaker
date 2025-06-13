@@ -5,12 +5,16 @@ import com.example.playlistmaker.search.data.dto.TracksSearchRequest
 import com.example.playlistmaker.search.domain.TracksRepository
 import com.example.playlistmaker.models.Track
 import com.example.playlistmaker.search.data.network.NetworkClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
 
-    override fun searchTracks(expression: String): List<Track> {
+    override fun searchTracks(expression: String): Flow<List<Track>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
-        return if (response.resultCode == 200 && response is TracksResponse) {
+        val list = if (response.resultCode == 200 && response is TracksResponse ) {
             response.results.map {
                 Track(
                     trackName = it.trackName,
@@ -28,5 +32,6 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
         } else {
             emptyList()
         }
-    }
+        emit(list)
+    }.flowOn(Dispatchers.IO)
 }
