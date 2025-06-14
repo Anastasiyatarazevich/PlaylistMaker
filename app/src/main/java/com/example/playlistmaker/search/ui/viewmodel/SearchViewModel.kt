@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.models.Track
-import com.example.playlistmaker.search.domain.SearchHistoryRepository
+import com.example.playlistmaker.search.domain.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.SearchState
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import kotlinx.coroutines.Job
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val searchTracksInteractor: SearchTracksInteractor,
-    private val searchHistoryRepository: SearchHistoryRepository,
+    private val searchHistoryInteractor: SearchHistoryInteractor
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow<SearchState>(SearchState.Start)
@@ -31,7 +31,11 @@ class SearchViewModel(
     fun getHistory(): LiveData<List<Track>> = history
 
     init {
-        history.value = searchHistoryRepository.getHistory()
+        viewModelScope.launch {
+            searchHistoryInteractor.getHistory().collect {
+                history.value = it
+            }
+        }
     }
 
     fun performSearchDebounced(query: String) {
@@ -51,15 +55,16 @@ class SearchViewModel(
     }
 
     fun addTrackToHistory(track: Track) {
-        searchHistoryRepository.addTrack(track)
-        history.value = searchHistoryRepository.getHistory()
+        searchHistoryInteractor.addTrack(track)
     }
 
     fun clearHistory() {
-        searchHistoryRepository.clearHistory()
-        history.value = searchHistoryRepository.getHistory()
+        searchHistoryInteractor.clearHistory()
     }
 
+    fun resetToInitialState() {
+        _screenState.value = SearchState.Start
+    }
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }

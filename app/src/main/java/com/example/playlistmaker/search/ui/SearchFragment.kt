@@ -107,6 +107,7 @@ class SearchFragment : Fragment() {
             }
         }
         binding.clearButton.setOnClickListener {
+            viewModel.resetToInitialState()
             binding.searchInput.setText("")
             hideKeyboard()
             binding.recyclerView.visibility = View.GONE

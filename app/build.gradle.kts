@@ -39,6 +39,8 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+
 }
 
 dependencies {
@@ -62,4 +64,7 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
+    val roomVersion = "2.5.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
 }

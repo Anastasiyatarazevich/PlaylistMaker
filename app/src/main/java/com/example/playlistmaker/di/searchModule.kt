@@ -6,6 +6,8 @@ import com.example.playlistmaker.search.data.impl.TracksRepositoryImpl
 import com.example.playlistmaker.search.data.network.ITunesApiService
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.search.domain.SearchHistoryInteractor
+import com.example.playlistmaker.search.domain.SearchHistoryInteractorImpl
 import com.example.playlistmaker.search.domain.SearchHistoryRepository
 import com.example.playlistmaker.search.domain.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.SearchTracksInteractorImpl
@@ -51,10 +53,15 @@ val searchModule = module {
         )
     }
 
+    factory<SearchHistoryInteractor> { (context: Context) ->
+        val repository = get<SearchHistoryRepository> { parametersOf(context) }
+        SearchHistoryInteractorImpl(repository)
+    }
+
     viewModel { (context: Context) ->
         SearchViewModel(
             searchTracksInteractor = get(),
-            searchHistoryRepository = get { parametersOf(context) }
+            searchHistoryInteractor = get { parametersOf(context) }
         )
     }
 }
