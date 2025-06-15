@@ -13,6 +13,7 @@ import com.example.playlistmaker.models.Track
 import com.example.playlistmaker.search.ui.adapters.TrackAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.content.Intent
+import androidx.core.view.updateLayoutParams
 import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
@@ -53,6 +54,10 @@ class FavoritesFragment : Fragment() {
                     trackList.clear()
                     trackList.addAll(state.tracks)
                     trackAdapter.notifyDataSetChanged()
+
+                    binding.recyclerViewFavourites.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        bottomMargin = if (trackList.size < 4) 700 else 100
+                    }
                 }
 
                 is FavoritesState.Empty -> {
