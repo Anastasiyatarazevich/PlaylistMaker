@@ -1,6 +1,7 @@
 package com.example.playlistmaker.di
 
 import android.content.Context
+import com.example.playlistmaker.db.AppDatabase
 import com.example.playlistmaker.search.data.impl.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.search.data.impl.TracksRepositoryImpl
 import com.example.playlistmaker.search.data.network.ITunesApiService
@@ -38,7 +39,10 @@ val searchModule = module {
     }
 
     single<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(
+            networkClient = get(),
+            favoriteTrackDao = get<AppDatabase>().favoriteTrackDao()
+        )
     }
 
     factory<SearchTracksInteractor> {
@@ -49,7 +53,8 @@ val searchModule = module {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         SearchHistoryRepositoryImpl(
             sharedPrefs = sharedPrefs,
-            gson = get()
+            gson = get(),
+            favoriteTrackDao = get<AppDatabase>().favoriteTrackDao()
         )
     }
 
