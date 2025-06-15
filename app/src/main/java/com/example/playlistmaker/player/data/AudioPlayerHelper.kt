@@ -1,22 +1,25 @@
 package com.example.playlistmaker.player.data
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import com.example.playlistmaker.models.Track
+import com.example.playlistmaker.player.domain.AudioPlayerRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerHelper(
     private val track: Track,
     private val mediaPlayer: MediaPlayer
-) {
-    private val handler = Handler(Looper.getMainLooper())
-    var playerState = STATE_DEFAULT
-        private set
+) : AudioPlayerRepository {
+    override var playerState = STATE_DEFAULT
+    private var progressJob: Job? = null
 
-    var onProgressUpdate: ((String) -> Unit)? = null
-    var onCompletion: (() -> Unit)? = null
+    private var onProgressUpdate: ((String) -> Unit)? = null
+    private var onCompletion: (() -> Unit)? = null
 
     init {
         preparePlayer()
@@ -34,7 +37,7 @@ class AudioPlayerHelper(
                 mediaPlayer.setOnCompletionListener {
                     playerState = STATE_PREPARED
                     mediaPlayer.seekTo(0)
-                    handler.removeCallbacksAndMessages(null)
+                    progressJob?.cancel()
                     onProgressUpdate?.invoke("00:00")
                     onCompletion?.invoke()
                 }
@@ -44,39 +47,48 @@ class AudioPlayerHelper(
         }
     }
 
-    private val progressRunnable = object : Runnable {
-        override fun run() {
-            if (playerState == STATE_PLAYING) {
-                val currentTime = SimpleDateFormat("mm:ss", Locale.getDefault())
-                    .format(mediaPlayer.currentPosition)
-                onProgressUpdate?.invoke(currentTime)
-                handler.postDelayed(this, UPDATE_INTERVAL)
-            }
-        }
-    }
-
-    fun startPlayer() {
+    override fun startPlayer() {
         if (playerState == STATE_PREPARED || playerState == STATE_PAUSED) {
             if (mediaPlayer.currentPosition >= mediaPlayer.duration) {
                 mediaPlayer.seekTo(0)
             }
             mediaPlayer.start()
             playerState = STATE_PLAYING
-            handler.post(progressRunnable)
+            startProgressLoop()
         }
     }
 
-    fun pausePlayer() {
+    override  fun pausePlayer() {
         if (playerState == STATE_PLAYING) {
             mediaPlayer.pause()
             playerState = STATE_PAUSED
-            handler.removeCallbacks(progressRunnable)
+            progressJob?.cancel()
         }
     }
 
-    fun release() {
-        handler.removeCallbacksAndMessages(null)
+  override  fun release() {
+        progressJob?.cancel()
         mediaPlayer.release()
+    }
+
+    override fun setProgressListener(listener: (String) -> Unit) {
+        onProgressUpdate = listener
+    }
+
+    override fun setCompletionListener(listener: () -> Unit) {
+        onCompletion = listener
+    }
+
+    private fun startProgressLoop() {
+        progressJob?.cancel()
+        progressJob = CoroutineScope(Dispatchers.Main).launch {
+            while (playerState == STATE_PLAYING) {
+                val currentTime = SimpleDateFormat("mm:ss", Locale.getDefault())
+                    .format(mediaPlayer.currentPosition)
+                onProgressUpdate?.invoke(currentTime)
+                delay(UPDATE_INTERVAL)
+            }
+        }
     }
 
     companion object {

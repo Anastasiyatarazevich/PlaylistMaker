@@ -1,11 +1,9 @@
 package com.example.playlistmaker.search.domain
 
 import com.example.playlistmaker.models.Track
+import kotlinx.coroutines.flow.Flow
 
 interface SearchTracksInteractor {
-    fun searchTracks(expression: String, consumer: Consumer)
+    fun searchTracks(expression: String): Flow<List<Track>>
 
-    interface Consumer {
-        fun consume(tracks: List<Track>)
-    }
 }
