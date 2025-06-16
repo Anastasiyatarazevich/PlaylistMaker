@@ -11,7 +11,7 @@ import com.example.playlistmaker.models.Track
 import com.example.playlistmaker.player.domain.AudioPlayerState
 import com.example.playlistmaker.player.ui.viewmodel.AudioPlayerViewModel
 import com.example.playlistmaker.search.ui.utils.ViewUtils
-import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -20,15 +20,14 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
 
-    private lateinit var viewModel: AudioPlayerViewModel
-
+    private val viewModel: AudioPlayerViewModel by viewModel {
+        parametersOf(requireNotNull(intent.getParcelableExtra<Track>(TRACK)))
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val track = intent.getParcelableExtra<Track>(TRACK)
-        viewModel = getViewModel { parametersOf(track) }
         setupObservers()
         setupPlaybackUI()
     }
@@ -82,12 +81,23 @@ class AudioPlayerActivity : AppCompatActivity() {
                 }
             }
         }
+
+        viewModel.isFavorite().observe(this) { isFavorite ->
+            binding.favoriteTrack.setImageResource(
+                if (isFavorite) R.drawable.dislike else R.drawable.like
+            )
+        }
     }
 
     private fun setupPlaybackUI() {
         binding.playTrack.setOnClickListener {
             viewModel.togglePlayback()
         }
+
+        binding.favoriteTrack.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+
         binding.backButton.setNavigationOnClickListener { finish() }
     }
 

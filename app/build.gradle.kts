@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("plugin.parcelize")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -62,9 +63,9 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.fragment.ktx)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
-    val roomVersion = "2.5.1"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
 }
