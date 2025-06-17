@@ -1,5 +1,8 @@
 package com.example.playlistmaker.media.domain
 
-sealed interface PlaylistsState {
-    object Empty : PlaylistsState
+import com.example.playlistmaker.models.Playlist
+
+sealed class PlaylistsState {
+    object Empty : PlaylistsState()
+    data class Content(val playlists: List<Playlist>) : PlaylistsState()
 }

@@ -24,6 +24,7 @@
     <dimen name="text_medium">19sp</dimen>
     <dimen name="text_info">13sp</dimen>
     <dimen name="text_small">11sp</dimen>
+    <dimen name="text_small2">12sp</dimen>
     <dimen name="text_button">14sp</dimen>
     <dimen name="text_big">22sp</dimen>
     <dimen name="icon_size_small">16dp</dimen>
@@ -35,5 +36,6 @@
     <dimen name="margin_start">13dp</dimen>
     <dimen name="margin_end">8dp</dimen>
     <dimen name="image_size">45dp</dimen>
-
+    <dimen name="spacing">100dp</dimen>
+    <dimen name="image_size_playlist">160dp</dimen>
 </resources>

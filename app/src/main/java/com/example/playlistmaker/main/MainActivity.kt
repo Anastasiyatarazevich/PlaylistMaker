@@ -27,4 +27,9 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav.setupWithNavController(navController)
     }
+
+    fun showBottomNav(show: Boolean) {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.visibility = if (show) View.VISIBLE else View.GONE
+    }
 }

@@ -45,7 +45,8 @@ val playerModule = module {
         AudioPlayerViewModel(
             interactor = get{parametersOf(track)},
             track = track,
-            favoritesInteractor = get()
+            favoritesInteractor = get(),
+            playlistInteractor = get()
         )
     }
 }
