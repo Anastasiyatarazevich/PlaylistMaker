@@ -37,8 +37,6 @@ class PlaylistFragment : Fragment() {
         binding.recyclerViewPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerViewPlaylists.adapter = adapter
 
-//        binding.recyclerViewPlaylists.addItemDecoration(GridSpacingItemDecoration(2, 100, false))
-
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlaylistsState.Empty -> {

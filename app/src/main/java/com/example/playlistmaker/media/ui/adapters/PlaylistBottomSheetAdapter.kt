@@ -1,14 +1,12 @@
 package com.example.playlistmaker.media.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ItemPlaylistBottomSheetBinding
 import com.example.playlistmaker.models.Playlist
 import com.example.playlistmaker.search.ui.utils.ViewUtils
 
@@ -25,9 +23,10 @@ class PlaylistBottomSheetAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_playlist_bottom_sheet, parent, false)
-        return PlaylistViewHolder(view)
+        val binding = ItemPlaylistBottomSheetBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return PlaylistViewHolder(binding)
     }
 
     override fun getItemCount() = playlists.size
@@ -36,22 +35,19 @@ class PlaylistBottomSheetAdapter(
         holder.bind(playlists[position])
     }
 
-    inner class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val name = view.findViewById<TextView>(R.id.playlist_name)
-        private val image = view.findViewById<ImageView>(R.id.playlist_image)
-        private val count = view.findViewById<TextView>(R.id.playlist_count)
+    inner class PlaylistViewHolder(private val binding: ItemPlaylistBottomSheetBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(playlist: Playlist) {
-            name.text = playlist.name
-            count.text = "${playlist.trackCount} трек${getTrackSuffix(playlist.trackCount)}"
+            binding.playlistName.text = playlist.name
+            binding.playlistCount.text = "${playlist.trackCount} трек${getTrackSuffix(playlist.trackCount)}"
 
-            Glide.with(itemView)
+            Glide.with(binding.root)
                 .load(playlist.imagePath)
                 .placeholder(R.drawable.placeholder)
-                .transform(RoundedCorners(ViewUtils.dpToPx(2f, itemView.context)))
-                .into(image)
+                .transform(RoundedCorners(ViewUtils.dpToPx(2f, binding.root.context)))
+                .into(binding.playlistImage)
 
-            itemView.setOnClickListener {
+            binding.root.setOnClickListener {
                 onClick(playlist)
             }
         }

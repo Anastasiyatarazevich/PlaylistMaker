@@ -1,13 +1,11 @@
 package com.example.playlistmaker.media.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.TabsPlaylistLayoutBinding
 import com.example.playlistmaker.models.Playlist
 
 class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
@@ -21,9 +19,10 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.tabs_playlist_layout, parent, false)
-        return PlaylistViewHolder(view)
+        val binding = TabsPlaylistLayoutBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return PlaylistViewHolder(binding)
     }
 
     override fun getItemCount() = playlists.size
@@ -32,16 +31,14 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
         holder.bind(playlists[position])
     }
 
-    class PlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val image = itemView.findViewById<ImageView>(R.id.playlist_image)
-        private val name = itemView.findViewById<TextView>(R.id.playlist_name)
-        private val tracks = itemView.findViewById<TextView>(R.id.playlist_count)
+    class PlaylistViewHolder(private val binding: TabsPlaylistLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(playlist: Playlist) {
-            name.text = playlist.name
-            tracks.text = "${playlist.trackCount} трек${getTrackSuffix(playlist.trackCount)}"
+            binding.playlistName.text = playlist.name
+            binding.playlistCount.text = "${playlist.trackCount} трек${getTrackSuffix(playlist.trackCount)}"
 
-            val context = itemView.context
+            val context = binding.root.context
             val placeholder = R.drawable.placeholder
 
             Glide.with(context)
@@ -49,8 +46,9 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
                 .placeholder(placeholder)
                 .error(placeholder)
                 .centerCrop()
-                .into(image)
+                .into(binding.playlistImage)
         }
+
         private fun getTrackSuffix(count: Int): String {
             return when {
                 count % 100 in 11..14 -> "ов"

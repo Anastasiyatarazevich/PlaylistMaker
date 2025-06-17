@@ -19,7 +19,6 @@ import com.example.playlistmaker.media.ui.viewmodel.CreatePlaylistViewModel
 import com.example.playlistmaker.search.ui.utils.ViewUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
