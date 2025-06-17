@@ -12,7 +12,9 @@ val dataModule = module {
             androidContext(),
             AppDatabase::class.java,
             "playlist_database.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     single { get<AppDatabase>().favoriteTrackDao() }

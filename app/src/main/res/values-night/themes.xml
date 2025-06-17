@@ -18,5 +18,6 @@
         <item name="textAppearanceBodySmall">@color/white</item>
         <item name="buttonTint">@color/white</item>
         <item name="android:iconTint">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
 </resources>
