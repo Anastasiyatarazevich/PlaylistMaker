@@ -22,8 +22,8 @@
             android:layout_height="match_parent"
 
             android:clipToPadding="false"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="64dp"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/layout_marginBottom_playlist"
             android:layout_gravity="center"/>
 
         <LinearLayout
@@ -39,9 +39,9 @@
 
             <TextView
                 style="@style/NoPlaylist"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="@dimen/margin_standard"
                 android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="@dimen/margin_standard"
                 android:text="@string/no_playlist" />
         </LinearLayout>
 

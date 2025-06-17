@@ -293,17 +293,17 @@
         <item name="android:textCursorDrawable">@drawable/cursor_color</item>
     </style>
 
-    <style name="PlaylistImageRounded" parent="">
+    <style name="PlaylistImageRounded">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
     </style>
 
-    <style name="PlaylistImageRoundedSmall" parent="">
+    <style name="PlaylistImageRoundedSmall">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">2dp</item>
     </style>
 
-    <style name="TextViewTab" parent="">
+    <style name="TextViewTab">
         <item name="android:layout_width">@dimen/image_size_playlist</item>
         <item name="android:layout_height">@dimen/list_item_padding</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
@@ -319,6 +319,14 @@
 
     <style name="CursorStyle" parent="">
         <item name="android:textCursorDrawable">@drawable/cursor_color</item>
+    </style>
+
+    <style name="ItemPlaylistBottomSheet" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">19dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textFontWeight">400</item>
     </style>
 </resources>
 

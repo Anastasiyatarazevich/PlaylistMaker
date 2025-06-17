@@ -38,4 +38,5 @@
     <dimen name="image_size">45dp</dimen>
     <dimen name="spacing">100dp</dimen>
     <dimen name="image_size_playlist">160dp</dimen>
+    <dimen name="layout_marginBottom_playlist">64dp</dimen>
 </resources>

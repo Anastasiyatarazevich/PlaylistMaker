@@ -20,25 +20,17 @@
 
     <TextView
         android:id="@+id/playlist_name"
-        android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:layout_marginStart="8dp"
+        style="@style/ItemPlaylistBottomSheet"
         android:layout_marginTop="14dp"
-        android:singleLine="true"
         android:textColor="?attr/textAppearanceBody1"
-        android:textFontWeight="400"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/playlist_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/playlist_count"
-        android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:layout_marginStart="8dp"
-        android:singleLine="true"
+        style="@style/ItemPlaylistBottomSheet"
         android:textColor="?attr/colorTertiary"
-        android:textFontWeight="400"
         android:textSize="11sp"
         app:layout_constraintStart_toEndOf="@+id/playlist_image"
         app:layout_constraintTop_toBottomOf="@id/playlist_name" />
