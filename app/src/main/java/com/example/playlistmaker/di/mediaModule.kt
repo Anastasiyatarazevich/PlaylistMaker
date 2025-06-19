@@ -26,10 +26,11 @@ val mediaModule = module {
 
     single<ImageSaver> { ImageSaverImpl(androidContext()) }
 
-    viewModel {
+    viewModel { (playlistId: Int) ->
         CreatePlaylistViewModel(
-            imageSaver = get(),
-            savePlaylistInteractor = get()
+            imageSaver            = get(),
+            savePlaylistInteractor= get(),
+            playlistId            = playlistId
         )
     }
 

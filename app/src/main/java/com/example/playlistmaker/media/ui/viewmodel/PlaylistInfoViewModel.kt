@@ -31,15 +31,44 @@ class PlaylistInfoViewModel(
     private val _playlistDeleted = MutableLiveData<Unit>()
     val playlistDeleted: LiveData<Unit> = _playlistDeleted
 
+    private val _shouldReloadData = MutableLiveData(false)
+    val shouldReloadData: LiveData<Boolean> = _shouldReloadData
+
     init {
+        loadData()
+    }
+
+    fun refreshData() {
+        _shouldReloadData.value = true
+    }
+
+    fun reloadIfNeeded() {
+        if (_shouldReloadData.value == true) {
+            loadData()
+            _shouldReloadData.value = false
+        }
+    }
+
+    fun removeTrackFromPlaylist(track: Track) {
+        viewModelScope.launch {
+            playlistInteractor.removeTrackFromPlaylist(track, currentPlaylistId)
+            loadData()
+        }
+    }
+
+    fun deleteCurrentPlaylist() {
+        viewModelScope.launch {
+            playlistInteractor.deletePlaylist(currentPlaylistId)
+            _playlistDeleted.postValue(Unit)
+        }
+    }
+
+    fun loadData() {
         viewModelScope.launch {
             playlistInteractor.getPlaylistById(currentPlaylistId)
                 .collect { pl ->
                     _playlist.postValue(pl)
                 }
-        }
-
-        viewModelScope.launch {
             playlistInteractor.getTracksByPlaylist(currentPlaylistId)
                 .collect { tracks ->
                     _tracks.postValue(tracks)
@@ -48,19 +77,6 @@ class PlaylistInfoViewModel(
                     _durationMinutes.postValue(mins)
                     _tracksCount.postValue(tracks.size)
                 }
-        }
-    }
-
-    fun removeTrackFromPlaylist(track: Track) {
-        viewModelScope.launch {
-            playlistInteractor.removeTrackFromPlaylist(track, currentPlaylistId)
-        }
-    }
-
-    fun deleteCurrentPlaylist() {
-        viewModelScope.launch {
-            playlistInteractor.deletePlaylist(currentPlaylistId)
-            _playlistDeleted.postValue(Unit)
         }
     }
 }

@@ -34,11 +34,8 @@
         android:id="@+id/createPlaylistFragment"
         android:name="com.example.playlistmaker.media.ui.fragments.CreatePlaylistFragment"
         android:label="CreatePlaylistFragment">
-        <argument
-            android:name="playlistId"
-            android:defaultValue="-1"
-            app:argType="integer" />
     </fragment>
+
     <fragment
         android:id="@+id/playlistInfoFragment"
         android:name="com.example.playlistmaker.media.ui.fragments.PlaylistInfoFragment"
@@ -46,6 +43,9 @@
         <argument
             android:name="playlistId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_playlistInfoFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
     </fragment>
 
 </navigation>

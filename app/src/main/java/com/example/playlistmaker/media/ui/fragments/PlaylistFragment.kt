@@ -34,7 +34,7 @@ class PlaylistFragment : Fragment() {
 
         adapter = PlaylistAdapter { playlist ->
             val bundle = Bundle().apply {
-                putInt("playlistId", playlist.id)
+                putInt(PLAYLIST_ID, playlist.id)
             }
             findNavController().navigate(R.id.playlistInfoFragment, bundle)
         }
@@ -63,5 +63,6 @@ class PlaylistFragment : Fragment() {
 
     companion object {
         fun newInstance() = PlaylistFragment()
+        private const val PLAYLIST_ID = "playlistId"
     }
 }

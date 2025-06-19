@@ -21,6 +21,7 @@
         <activity
             android:name=".player.ui.AudioPlayerActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".main.MainActivity"

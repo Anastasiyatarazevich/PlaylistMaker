@@ -1,13 +1,14 @@
 package com.example.playlistmaker.media.ui.fragments
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -49,10 +50,11 @@ class PlaylistInfoFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val playlistId = arguments?.getInt("playlistId") ?: -1
+        val playlistId = arguments?.getInt(PLAYLIST_ID) ?: -1
         viewModel = getViewModel { parametersOf(playlistId) }
 
         (activity as? MainActivity)?.showBottomNav(false)
@@ -65,22 +67,24 @@ class PlaylistInfoFragment : Fragment() {
             }
         }
 
+        viewModel.shouldReloadData.observe(viewLifecycleOwner) { reload ->
+            if (reload) {
+                viewModel.loadData()
+            }
+        }
+
         playlistAdapter.onLongClickTrack = { track ->
             val dialog = AlertDialog.Builder(requireContext())
-                .setMessage("Хотите удалить трек?")
-                .setNegativeButton("НЕТ") { d, _ ->
+                .setMessage(R.string.delete_track)
+                .setNegativeButton(R.string.no) { d, _ ->
                     d.dismiss()
                 }
-                .setPositiveButton("ДА") { d, _ ->
+                .setPositiveButton(R.string.yes) { d, _ ->
                     d.dismiss()
                     viewModel.removeTrackFromPlaylist(track)
                 }
                 .show()
-
-            val positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            val negative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            positive.setTextColor(ContextCompat.getColor(requireContext(), R.color.background_blue))
-            negative.setTextColor(ContextCompat.getColor(requireContext(), R.color.background_blue))
+            changeDialogTextColor(dialog)
         }
 
         binding.playlistsRecycler.layoutManager = LinearLayoutManager(requireContext())
@@ -92,29 +96,20 @@ class PlaylistInfoFragment : Fragment() {
 
             binding.playlistName.text = playlist.name
             binding.description.text = playlist.description ?: ""
-
-            val placeholder = R.drawable.placeholder
-            Glide.with(binding.root)
-                .load(playlist.imagePath ?: "")
-                .placeholder(placeholder)
-                .error(placeholder)
-                .centerCrop()
-                .into(binding.placeholderTrack)
+            loadImage(binding.placeholderTrack, playlist.imagePath)
 
             binding.playlistNameMore.text = currentPlaylistName
             binding.descriptionMore.text = currentDescription
-
-
-            Glide.with(binding.root)
-                .load(playlist.imagePath ?: "")
-                .placeholder(placeholder)
-                .error(placeholder)
-                .centerCrop()
-                .into(binding.artworkImage)
+            loadImage(binding.artworkImage, playlist.imagePath)
         }
 
         viewModel.tracksCount.observe(viewLifecycleOwner) { count ->
             binding.countOfTrack.text = "$count трек${getTrackSuffix(count)}"
+            if (count == 0) {
+                binding.noTrackText.visibility = View.VISIBLE
+            } else {
+                binding.noTrackText.visibility = View.GONE
+            }
         }
 
         binding.backButton.setNavigationOnClickListener {
@@ -179,7 +174,6 @@ class PlaylistInfoFragment : Fragment() {
 
         viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
             binding.playlistsBottomSheet.visibility = View.VISIBLE
-            Log.e("HUH", trackList.toString())
             trackList.clear()
             trackList.addAll(tracks)
             playlistAdapter.notifyDataSetChanged()
@@ -190,15 +184,16 @@ class PlaylistInfoFragment : Fragment() {
         }
 
         binding.buttonDelete.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Удалить плейлист")
-                .setMessage("Хотите удалить плейлист?")
-                .setNegativeButton("Нет") { dialog, _ -> dialog.dismiss() }
-                .setPositiveButton("Да") { dialog, _ ->
+            val dialog = AlertDialog.Builder(requireContext())
+                .setTitle(R.string.delete_playlist_title)
+                .setMessage(R.string.delete_playlist_message)
+                .setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
+                .setPositiveButton(R.string.yes) { dialog, _ ->
                     dialog.dismiss()
                     viewModel.deleteCurrentPlaylist()
                 }
                 .show()
+            changeDialogTextColor(dialog)
         }
 
         viewModel.playlistDeleted.observe(viewLifecycleOwner) {
@@ -209,6 +204,21 @@ class PlaylistInfoFragment : Fragment() {
             share()
         }
 
+        binding.buttonEdit.setOnClickListener() {
+            val args = Bundle().apply {
+                putInt(PLAYLIST_ID, playlistId)
+            }
+
+            findNavController().navigate(R.id.createPlaylistFragment, args)
+        }
+
+    }
+
+    private fun changeDialogTextColor(dialog: AlertDialog) {
+        val positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        val negative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+        positive.setTextColor(ContextCompat.getColor(requireContext(), R.color.background_blue))
+        negative.setTextColor(ContextCompat.getColor(requireContext(), R.color.background_blue))
     }
 
     private fun getTrackSuffix(count: Int): String {
@@ -243,11 +253,21 @@ class PlaylistInfoFragment : Fragment() {
         return current
     }
 
+    private fun loadImage(imageView: ImageView, imagePath: String?) {
+        val placeholder = R.drawable.placeholder
+        Glide.with(requireContext())
+            .load(imagePath ?: "")
+            .placeholder(placeholder)
+            .error(placeholder)
+            .centerCrop()
+            .into(imageView)
+    }
+
     private fun share() {
         if (trackList.isEmpty()) {
             Toast.makeText(
                 requireContext(),
-                "В этом плейлисте нет списка треков, которым можно поделиться",
+                R.string.no_tracks_to_share,
                 Toast.LENGTH_SHORT
             ).show()
         } else {
@@ -266,14 +286,21 @@ class PlaylistInfoFragment : Fragment() {
                 putExtra(Intent.EXTRA_TEXT, sb.toString().trim())
             }
             startActivity(
-                Intent.createChooser(shareIntent, "Поделиться плейлистом")
+                Intent.createChooser(shareIntent, getString(R.string.share_playlist))
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshData()
+        viewModel.reloadIfNeeded()
     }
 
 
     companion object {
         private const val TRACK = "TRACK_DATA"
+        private const val PLAYLIST_ID = "playlistId"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
