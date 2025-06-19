@@ -13,6 +13,7 @@ import com.example.playlistmaker.media.domain.PlaylistInteractorImpl
 import com.example.playlistmaker.media.domain.PlaylistRepository
 import com.example.playlistmaker.media.ui.viewmodel.CreatePlaylistViewModel
 import com.example.playlistmaker.media.ui.viewmodel.FavoritesViewModel
+import com.example.playlistmaker.media.ui.viewmodel.PlaylistInfoViewModel
 import com.example.playlistmaker.media.ui.viewmodel.PlaylistsViewModel
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
@@ -25,10 +26,11 @@ val mediaModule = module {
 
     single<ImageSaver> { ImageSaverImpl(androidContext()) }
 
-    viewModel {
+    viewModel { (playlistId: Int) ->
         CreatePlaylistViewModel(
-            imageSaver = get(),
-            savePlaylistInteractor = get()
+            imageSaver            = get(),
+            savePlaylistInteractor= get(),
+            playlistId            = playlistId
         )
     }
 
@@ -48,6 +50,10 @@ val mediaModule = module {
             playlistTrackDao = get<AppDatabase>().playlistTracksDao(),
             gson = get()
         )
+    }
+
+    viewModel { (playlistId: Int) ->
+        PlaylistInfoViewModel(get(), playlistId)
     }
 
     single<PlaylistInteractor> { PlaylistInteractorImpl(get()) }
