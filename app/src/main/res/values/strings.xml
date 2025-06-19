@@ -43,8 +43,8 @@
     <string name="complete">Завершить</string>
     <string name="no_permission">Разрешение не предоставлено:(</string>
     <string name="delete_track">Хотите удалить трек?</string>
-    <string name="delete_playlist_title">Хотите удалить трек?</string>
-    <string name="delete_playlist_message">Хотите удалить трек?</string>
+    <string name="delete_playlist_title">Удалить плейлист</string>
+    <string name="delete_playlist_message">Хотите удалить плейлист?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="no_tracks_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
