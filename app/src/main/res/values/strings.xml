@@ -49,4 +49,7 @@
     <string name="no">Нет</string>
     <string name="no_tracks_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
     <string name="share_playlist">Поделиться плейлистом</string>
+    <string name="share_playlist_1">Поделиться</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="edit_playlist">Редактировать информацию</string>
 </resources>

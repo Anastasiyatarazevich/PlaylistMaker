@@ -260,7 +260,7 @@
             android:layout_width="match_parent"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginTop="29dp"
-            android:text="Поделиться"
+            android:text="@string/share_playlist_1"
             android:textColor="?attr/textAppearanceBodyMedium"
             android:textSize="@dimen/text_normal" />
 
@@ -270,7 +270,7 @@
             android:layout_width="match_parent"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginTop="29dp"
-            android:text="Редактировать информацию"
+            android:text="@string/edit_playlist"
             android:textColor="?attr/textAppearanceBodyMedium"
             android:textSize="@dimen/text_normal" />
 
@@ -280,7 +280,7 @@
             android:layout_width="match_parent"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginTop="29dp"
-            android:text="Удалить плейлист"
+            android:text="@string/delete_playlist"
             android:textColor="?attr/textAppearanceBodyMedium"
             android:textSize="@dimen/text_normal" />
 
