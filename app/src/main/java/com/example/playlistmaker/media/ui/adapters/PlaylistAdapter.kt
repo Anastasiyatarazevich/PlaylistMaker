@@ -8,7 +8,9 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.TabsPlaylistLayoutBinding
 import com.example.playlistmaker.models.Playlist
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
+class PlaylistAdapter(
+    private val onItemClick: (Playlist) -> Unit
+) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
     private val playlists = mutableListOf<Playlist>()
 
@@ -22,17 +24,22 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
         val binding = TabsPlaylistLayoutBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return PlaylistViewHolder(binding)
+        return PlaylistViewHolder(binding, onItemClick)
     }
 
     override fun getItemCount() = playlists.size
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         holder.bind(playlists[position])
+        holder.itemView.setOnClickListener {
+            onItemClick(playlists[position])
+        }
     }
 
-    class PlaylistViewHolder(private val binding: TabsPlaylistLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class PlaylistViewHolder(
+        private val binding: TabsPlaylistLayoutBinding,
+        private val onItemClick: (Playlist) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(playlist: Playlist) {
             binding.playlistName.text = playlist.name
@@ -47,6 +54,8 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
                 .error(placeholder)
                 .centerCrop()
                 .into(binding.playlistImage)
+
+            binding.root.setOnClickListener { onItemClick(playlist) }
         }
 
         private fun getTrackSuffix(count: Int): String {

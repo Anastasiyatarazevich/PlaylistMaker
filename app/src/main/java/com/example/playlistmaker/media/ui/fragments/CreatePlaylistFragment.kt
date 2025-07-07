@@ -1,32 +1,34 @@
 package com.example.playlistmaker.media.ui.fragments
 
+import android.Manifest
 import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.main.MainActivity
 import com.example.playlistmaker.media.ui.viewmodel.CreatePlaylistViewModel
 import com.example.playlistmaker.search.ui.utils.ViewUtils
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.core.content.ContextCompat
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 
 class CreatePlaylistFragment : Fragment() {
     private lateinit var binding: FragmentCreatePlaylistBinding
-    private val viewModel: CreatePlaylistViewModel by viewModel()
-
+    private lateinit var viewModel: CreatePlaylistViewModel
+    private val playlistId: Int by lazy { arguments?.getInt(PLAYLIST_ID) ?: -1 }
     private val pickMedia = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri ->
@@ -41,7 +43,8 @@ class CreatePlaylistFragment : Fragment() {
         if (isGranted) {
             launchPhotoPicker()
         } else {
-            Toast.makeText(requireContext(), "Разрешение не предоставлено:(", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.no_permission, Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -50,12 +53,16 @@ class CreatePlaylistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCreatePlaylistBinding.inflate(inflater, container, false)
-        return binding.root    }
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = getViewModel { parametersOf(playlistId) }
+
         (activity as? MainActivity)?.showBottomNav(false)
+
 
         binding.backButton.setNavigationOnClickListener {
 
@@ -83,20 +90,43 @@ class CreatePlaylistFragment : Fragment() {
             }
         }
 
-        viewModel.playlistCreated.observe(viewLifecycleOwner) {
-            it?.let {
-                showToast("Плейлист «${viewModel.name.value}» создан")
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }
-        }
-
         viewModel.isCreateButtonEnabled.observe(viewLifecycleOwner) { isEnabled ->
             binding.createPlaylist.isEnabled = isEnabled
         }
 
-        binding.createPlaylist.setOnClickListener {
-            viewModel.createPlaylist()
+        viewModel.existingName.observe(viewLifecycleOwner) { name ->
+            binding.playlistsName.setText(name)
+
         }
+        viewModel.existingDescription.observe(viewLifecycleOwner) { desc ->
+            binding.playlistDescription.setText(desc)
+        }
+
+
+        viewModel.playlistSaved.observe(viewLifecycleOwner) {
+            val action = if (playlistId == -1) "создан" else "сохранён"
+            Toast.makeText(
+                requireContext(),
+                "Плейлист «${viewModel.name.value}» $action", Toast.LENGTH_SHORT
+            )
+                .show()
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.playlistsName.addTextChangedListener {
+            viewModel.updateName(it.toString())
+        }
+        binding.playlistDescription.addTextChangedListener {
+            viewModel.updateDescription(it.toString())
+        }
+
+        binding.createPlaylist.setOnClickListener {
+            viewModel.savePlaylist()
+        }
+
+        binding.playlistsName.setText(viewModel.existingName.value)
+        binding.playlistsName.setText(viewModel.description.value)
+
 
         updateCreateButtonState()
     }
@@ -116,15 +146,13 @@ class CreatePlaylistFragment : Fragment() {
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     launchPhotoPicker()
                 }
+
                 else -> {
                     requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
             }
         }
-    }
 
-    private fun showToast(text: String) {
-        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
     }
 
     private fun updateCreateButtonState() {
@@ -135,10 +163,10 @@ class CreatePlaylistFragment : Fragment() {
     private fun checkBeforeExit() {
         if (viewModel.hasUnsavedChanges()) {
             AlertDialog.Builder(requireContext())
-                .setTitle("Завершить создание плейлиста?")
-                .setMessage("Все несохраненные данные будут потеряны")
-                .setNegativeButton("Отмена", null)
-                .setPositiveButton("Завершить") { _, _ ->
+                .setTitle("Завершить ${if (playlistId == -1) "создание" else "редактирование"}?")
+                .setMessage(R.string.data_loss)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.complete) { _, _ ->
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
                 .show()
@@ -147,8 +175,17 @@ class CreatePlaylistFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.showBottomNav(false)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as? MainActivity)?.showBottomNav(true)
+    }
+
+    companion object {
+        private const val PLAYLIST_ID = "playlistId"
     }
 }

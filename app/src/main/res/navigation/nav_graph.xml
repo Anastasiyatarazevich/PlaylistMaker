@@ -15,10 +15,13 @@
         android:id="@+id/mediaLibraryFragment"
         android:name="com.example.playlistmaker.media.ui.MediaLibraryFragment"
         android:label="@string/media"
-        tools:layout="@layout/fragment_media_library" >
+        tools:layout="@layout/fragment_media_library">
         <action
             android:id="@+id/action_mediaLibraryFragment_to_createPlaylistFragment"
             app:destination="@id/createPlaylistFragment" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_playlistInfoFragment"
+            app:destination="@id/playlistInfoFragment" />
     </fragment>
 
     <fragment
@@ -31,6 +34,18 @@
         android:id="@+id/createPlaylistFragment"
         android:name="com.example.playlistmaker.media.ui.fragments.CreatePlaylistFragment"
         android:label="CreatePlaylistFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistInfoFragment"
+        android:name="com.example.playlistmaker.media.ui.fragments.PlaylistInfoFragment"
+        android:label="PlaylistInfoFragment">
+        <argument
+            android:name="playlistId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_playlistInfoFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
     </fragment>
 
 </navigation>

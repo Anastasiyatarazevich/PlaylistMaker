@@ -11,6 +11,7 @@ import android.text.format.DateFormat
 class TrackAdapter(private val trackList: List<Track>) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
     var onClickTrack: ((Track) -> Unit)? = null
+    var onLongClickTrack: ((Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val binding = TrackItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,6 +23,10 @@ class TrackAdapter(private val trackList: List<Track>) : RecyclerView.Adapter<Tr
         holder.bind(track)
         holder.itemView.setOnClickListener {
             onClickTrack?.invoke(track)
+        }
+        holder.itemView.setOnLongClickListener {
+            onLongClickTrack?.invoke(track)
+            true
         }
     }
 
@@ -38,4 +43,5 @@ class TrackAdapter(private val trackList: List<Track>) : RecyclerView.Adapter<Tr
                 .into(binding.artworkImage)
         }
     }
+
 }
